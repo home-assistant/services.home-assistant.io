@@ -27,7 +27,7 @@ describe("Handler", function () {
       Object.entries({ "CF-Connecting-IP": "1.2.3.4" })
     );
     MockRequest = {
-      url: "https://example.com",
+      url: "https://example.com/v1/",
       headers,
       cf: { country: "XX" },
     };

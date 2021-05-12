@@ -25,9 +25,11 @@ export async function handleRequest(request: Request) {
     })
   );
 
-  const requestedKey = requestUrl.pathname.replace("/v1/", "");
+  const requestedKey = requestUrl.pathname.startsWith("/v1/")
+    ? requestUrl.pathname.substr(4)
+    : undefined;
 
-  if (!["/v1", "/"].includes(requestedKey)) {
+  if (requestedKey !== undefined && requestedKey.length !== 0) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
         return new Response(null, { status: 405 });
