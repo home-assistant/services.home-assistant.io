@@ -1,9 +1,9 @@
 import { handleRequest } from "../src/handler";
 
 class MockResponse {
-  body;
-  status;
-  headers;
+  body: string;
+  status: number = 200;
+  headers: Map<string, string> = new Map();
   constructor(body: string, data: any) {
     this.body = body;
     if (data) {
@@ -20,14 +20,17 @@ class MockResponse {
 }
 
 describe("Handler", function () {
-  let MockRequest;
+  let MockRequest: any;
   beforeEach(() => {
+    (global as any).Response = MockResponse;
+    const headers: Map<string, string> = new Map(
+      Object.entries({ "CF-Connecting-IP": "1.2.3.4" })
+    );
     MockRequest = {
       url: "http://example.com",
-      headers: new Map(Object.entries({ "CF-Connecting-IP": "1.2.3.4" })),
+      headers,
       cf: { country: "XX" },
     };
-    (global as any).Response = MockResponse;
   });
 
   it("Regular base request", async () => {
