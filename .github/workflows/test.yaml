@@ -23,7 +23,7 @@ jobs:
         run: yarn install
 
       - name: Build
-        run: wrangler build
+        run: ./node_modules/.bin/wrangler build
 
   test:
     runs-on: ubuntu-latest
@@ -39,4 +39,4 @@ jobs:
         run: yarn install
 
       - name: Test
-        run: jest
+        run: ./node_modules/.bin/jest
