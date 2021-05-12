@@ -1,0 +1,4 @@
+change-template: "- #$NUMBER $TITLE @$AUTHOR"
+
+template: |
+  $CHANGES
