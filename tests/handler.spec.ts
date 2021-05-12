@@ -27,7 +27,7 @@ describe("Handler", function () {
       Object.entries({ "CF-Connecting-IP": "1.2.3.4" })
     );
     MockRequest = {
-      url: "http://example.com",
+      url: "https://example.com",
       headers,
       cf: { country: "XX" },
     };
@@ -42,7 +42,7 @@ describe("Handler", function () {
   it("Request single key", async () => {
     const response = await handleRequest({
       ...MockRequest,
-      url: "http://example.com/v1/ip",
+      url: "https://example.com/v1/ip",
     });
     const result = await response.text();
     expect(result).toBe("1.2.3.4");
@@ -55,5 +55,22 @@ describe("Handler", function () {
     });
     const result = await response.text();
     expect(response.status).toBe(400);
+  });
+
+  it("http request", async () => {
+    const response = await handleRequest({
+      ...MockRequest,
+      url: "http://example.com/v1",
+    });
+    const result = await response.json();
+    expect(result.ip).not.toBeDefined();
+  });
+
+  it("http request to not alowed key", async () => {
+    const response = await handleRequest({
+      ...MockRequest,
+      url: "http://example.com/v1/ip",
+    });
+    expect(response.status).toBe(405);
   });
 });

@@ -32,6 +32,6 @@ curl -sSL https://whoami.home-assistant.io/v1
 ```
 
 ```bash
-curl -sSL http://whoami.home-assistant.io/v1/ip
+curl -sSL https://whoami.home-assistant.io/v1/ip
 1.2.3.4
 ```
