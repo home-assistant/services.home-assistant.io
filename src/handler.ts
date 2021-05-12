@@ -36,7 +36,7 @@ export async function handleRequest(request: Request) {
         headers: { "content-type": "text/html;charset=UTF-8" },
       });
     }
-    return new Response(`The requested key "${requestedKey} is not valid"`, {
+    return new Response(`The requested key "${requestedKey}" is not valid`, {
       headers: { "content-type": "text/html;charset=UTF-8" },
       status: 400,
     });
