@@ -4,11 +4,9 @@ export async function handleRequest(request: Request) {
 
   const httpResponse: Map<string, any> = new Map(
     Object.entries({
-      continent: request.cf.continent,
-      country: request.cf.country,
       timezone: request.cf.timezone,
       iso_time: date.toISOString(),
-      timestamp: date.getTime(),
+      timestamp: date.getTime() / 1000,
     })
   );
 
@@ -16,6 +14,8 @@ export async function handleRequest(request: Request) {
     Object.entries({
       ip: request.headers.get("CF-Connecting-IP"),
       city: request.cf.city,
+      continent: request.cf.continent,
+      country: request.cf.country,
       latitude: request.cf.latitude,
       longitude: request.cf.longitude,
       postal_code: request.cf.postalCode,
