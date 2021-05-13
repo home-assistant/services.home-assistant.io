@@ -7,7 +7,7 @@ account_id = "dc9f963dfa4a630ca83eda7ccd8f363d"
 # For production environment, use '-e production'
 [env.production]
 zone_id = "0ba583492080d3db28c103574f1d19cf"
-route = "*whoami.home-assistant.io/v1*"
+route = "*whoami.home-assistant.io/*"
 
 # For dev environment, use '-e dev'
 [env.dev]

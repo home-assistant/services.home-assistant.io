@@ -24,10 +24,10 @@ curl -sSL https://whoami.home-assistant.io/v1
   "longitude": "12.34567",
   "postal_code": "12345",
   "region_code": "00",
-  "region": "Costa Gravas",
+  "region": "Gotham",
   "timezone": "Earth/Gotham",
   "iso_time": "2021-05-12T11:29:15.752Z",
-  "timestamp": 1620818955752
+  "timestamp": 1620818956
 }
 ```
 

@@ -1,12 +1,20 @@
 export async function handleRequest(request: Request) {
   const requestUrl = new URL(request.url);
+  if (!requestUrl.pathname.startsWith("/v1")) {
+    // Redirect non /v1 paths to the repository
+    return Response.redirect(
+      "https://github.com/home-assistant/whoami.home-assistant.io",
+      301
+    );
+  }
+
   const date = new Date();
 
   const httpResponse: Map<string, any> = new Map(
     Object.entries({
       timezone: request.cf.timezone,
       iso_time: date.toISOString(),
-      timestamp: date.getTime() / 1000,
+      timestamp: Math.round(date.getTime() / 1000),
     })
   );
 
@@ -21,7 +29,7 @@ export async function handleRequest(request: Request) {
       postal_code: request.cf.postalCode,
       region_code: request.cf.regionCode,
       region: request.cf.region,
-      ...httpResponse,
+      ...Object.fromEntries(httpResponse),
     })
   );
 
@@ -29,7 +37,7 @@ export async function handleRequest(request: Request) {
     ? requestUrl.pathname.substr(4)
     : undefined;
 
-  if (requestedKey !== undefined && requestedKey.length !== 0) {
+  if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
         return new Response(null, { status: 405 });

@@ -27,9 +27,9 @@ describe("Handler", function () {
       Object.entries({ "CF-Connecting-IP": "1.2.3.4" })
     );
     MockRequest = {
-      url: "https://example.com/v1/",
+      url: "https://example.com/v1",
       headers,
-      cf: { country: "XX" },
+      cf: { country: "XX", timezone: "Earth/Gotham" },
     };
   });
 
@@ -37,6 +37,7 @@ describe("Handler", function () {
     const response = await handleRequest(MockRequest);
     const result = await response.json();
     expect(result.ip).toBe("1.2.3.4");
+    expect(result.timezone).toBeDefined();
   });
 
   it("Request single key", async () => {
@@ -53,7 +54,6 @@ describe("Handler", function () {
       ...MockRequest,
       url: "http://example.com/v1/invalid",
     });
-    const result = await response.text();
     expect(response.status).toBe(400);
   });
 
@@ -64,6 +64,7 @@ describe("Handler", function () {
     });
     const result = await response.json();
     expect(result.ip).not.toBeDefined();
+    expect(result.timezone).toBeDefined();
   });
 
   it("http request to not alowed key", async () => {
@@ -72,5 +73,19 @@ describe("Handler", function () {
       url: "http://example.com/v1/ip",
     });
     expect(response.status).toBe(405);
+  });
+
+  it("Redirect request", async () => {
+    (global as any).Response.redirect = (url: string, status?: number) => {
+      return { url, status };
+    };
+    const response = await handleRequest({
+      ...MockRequest,
+      url: "http://example.com",
+    });
+    expect(response.url).toBe(
+      "https://github.com/home-assistant/whoami.home-assistant.io"
+    );
+    expect(response.status).toBe(301);
   });
 });
