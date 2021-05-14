@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install packages
-        run: script/bootstrap
+        run: yarn install
 
       - name: Set environment
         id: environment
