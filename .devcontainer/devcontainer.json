@@ -1,0 +1,29 @@
+{
+    "name": "whoami.home-assistant.io",
+    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:14",
+    "context": "..",
+    "remoteEnv": {
+      "PATH":"${containerEnv:PATH}:./node_modules/.bin",
+      "DEVCONTAINER": "true"
+    },
+    "postCreateCommand": "bash -i -c 'nvm install --lts' && yarn install",
+    "appPort": ["8080:8080", "3001:3001"],
+    "extensions": [
+      "dbaeumer.vscode-eslint",
+      "ms-vscode.vscode-typescript-tslint-plugin",
+      "esbenp.prettier-vscode",
+      "bierner.lit-html",
+      "runem.lit-plugin"
+    ],
+    "settings": {
+      "files.eol": "\n",
+      "editor.tabSize": 2,
+      "editor.formatOnPaste": false,
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true,
+      "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      },
+    "files.trimTrailingWhitespace": true
+    }
+  }

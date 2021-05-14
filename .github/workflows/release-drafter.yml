@@ -1,0 +1,19 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    name: Release Drafter
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2.3.4
+
+      - name: Run Release Drafter
+        uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
