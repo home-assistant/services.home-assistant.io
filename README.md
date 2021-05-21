@@ -20,6 +20,7 @@ curl -sSL https://whoami.home-assistant.io/v1
   "city": "Gotham",
   "continent": "Earth",
   "country": "XX",
+  "country_name": "Unknown",
   "latitude": "12.34567",
   "longitude": "12.34567",
   "postal_code": "12345",

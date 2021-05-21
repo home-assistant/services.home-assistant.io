@@ -1,3 +1,5 @@
+import { countryName } from "./countries";
+
 export async function handleRequest(request: Request) {
   const requestUrl = new URL(request.url);
   if (!requestUrl.pathname.startsWith("/v1")) {
@@ -24,6 +26,7 @@ export async function handleRequest(request: Request) {
       city: request.cf.city,
       continent: request.cf.continent,
       country: request.cf.country,
+      country_name: countryName(request.cf.country),
       latitude: request.cf.latitude,
       longitude: request.cf.longitude,
       postal_code: request.cf.postalCode,
