@@ -252,4 +252,4 @@ const countries = new Map([
 ]);
 
 export const countryName = (countryCode: string): string =>
-  countries[countryCode] || "Unknown";
+  countries.get(countryCode || "XX") || "Unknown";
