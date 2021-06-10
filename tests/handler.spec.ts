@@ -49,6 +49,17 @@ describe("Handler", function () {
     expect(result).toBe("1.2.3.4");
   });
 
+  it("Request with undefined values", async () => {
+    const response = await handleRequest({
+      ...MockRequest,
+      url: "https://example.com/v1",
+    });
+    const result = await response.json();
+    expect(result).toStrictEqual(
+      expect.objectContaining({ region_code: null })
+    );
+  });
+
   it("Request invalid key", async () => {
     const response = await handleRequest({
       ...MockRequest,

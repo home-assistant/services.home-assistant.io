@@ -57,7 +57,7 @@ export async function handleRequest(request: Request) {
       Object.fromEntries(
         requestUrl.protocol === "http:" ? httpResponse : httpsResponse
       ),
-      null,
+      (_, value) => (value === undefined ? null : value),
       2
     ),
     {
