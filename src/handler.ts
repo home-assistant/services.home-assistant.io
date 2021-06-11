@@ -1,5 +1,22 @@
-export async function handleRequest(request: Request) {
+import Toucan from "toucan-js";
+
+const REQUIRED_KEYS = ["country", "timezone"];
+
+export async function handleRequestWrapper(
+  request: Request,
+  sentry: Toucan
+): Promise<Response> {
+  try {
+    return await handleRequest(request, sentry);
+  } catch (e) {
+    sentry.captureException(e);
+    return new Response(e, { status: 500 });
+  }
+}
+
+export async function handleRequest(request: Request, sentry: Toucan) {
   const requestUrl = new URL(request.url);
+
   if (!requestUrl.pathname.startsWith("/v1")) {
     // Redirect non /v1 paths to the repository
     return Response.redirect(
@@ -7,6 +24,13 @@ export async function handleRequest(request: Request) {
       301
     );
   }
+
+  sentry.setUser({ id: request.headers.get("cf-request-id") });
+  sentry.setExtra("requestUrl", {
+    protocol: requestUrl.protocol,
+    pathname: requestUrl.pathname,
+    url: requestUrl,
+  });
 
   const date = new Date();
 
@@ -33,6 +57,8 @@ export async function handleRequest(request: Request) {
     })
   );
 
+  sentry.setExtras(Object.fromEntries(httpsResponse));
+
   const requestedKey = requestUrl.pathname.startsWith("/v1/")
     ? requestUrl.pathname.substr(4)
     : undefined;
@@ -40,17 +66,20 @@ export async function handleRequest(request: Request) {
   if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
-        return new Response(null, { status: 405 });
+        throw new Error("Requested key not allowed for http");
       }
       return new Response(httpsResponse.get(requestedKey), {
         headers: { "content-type": "text/html;charset=UTF-8" },
       });
     }
-    return new Response(`The requested key "${requestedKey}" is not valid`, {
-      headers: { "content-type": "text/html;charset=UTF-8" },
-      status: 400,
-    });
+    throw new Error(`The requested key "${requestedKey}" is not valid`);
   }
+
+  httpsResponse.forEach((value, key) => {
+    if (REQUIRED_KEYS.includes(key) && value === undefined) {
+      throw new Error(`Value for required key "${key}" is undefined`);
+    }
+  });
 
   return new Response(
     JSON.stringify(
