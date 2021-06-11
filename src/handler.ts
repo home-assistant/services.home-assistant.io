@@ -50,7 +50,7 @@ export async function handleRequest(request: Request, sentry: Toucan) {
     );
   }
 
-  sentry.setUser({ id: request.headers.get("cf-request-id") });
+  sentry.setExtra("requestId", request.headers.get("cf-request-id"));
   sentry.setExtra("requestUrl", {
     protocol: requestUrl.protocol,
     pathname: requestUrl.pathname,
