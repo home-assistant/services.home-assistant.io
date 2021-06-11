@@ -2,6 +2,24 @@ import Toucan from "toucan-js";
 
 const REQUIRED_KEYS = ["country", "timezone"];
 
+export enum WhoamiErrorType {
+  UNEXPECTED = "unexpected",
+  MISSING_KEY_VALUE = "missing_key_value",
+  NOT_VALID = "not_valid",
+  NOT_ALLOWED = "not_allowed",
+}
+
+export class WhoamiError extends Error {
+  code: number;
+  errorType: WhoamiErrorType;
+  constructor(errorType: WhoamiErrorType, message: string, code?: number) {
+    super(message);
+    this.name = `WhoamiError - ${errorType}`;
+    this.code = code || 500;
+    this.errorType = errorType;
+  }
+}
+
 export async function handleRequestWrapper(
   request: Request,
   sentry: Toucan
@@ -9,8 +27,12 @@ export async function handleRequestWrapper(
   try {
     return await handleRequest(request, sentry);
   } catch (e) {
+    if (!(e instanceof WhoamiError)) {
+      e = new WhoamiError(WhoamiErrorType.UNEXPECTED, e.message);
+    }
+    sentry.addBreadcrumb({ message: e.message });
     sentry.captureException(e);
-    return new Response(e, { status: 500 });
+    return new Response(e.errorType, { status: e.code });
   }
 }
 
@@ -66,18 +88,29 @@ export async function handleRequest(request: Request, sentry: Toucan) {
   if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
-        throw new Error("Requested key not allowed for http");
+        throw new WhoamiError(
+          WhoamiErrorType.NOT_ALLOWED,
+          "Requested key not allowed for http",
+          405
+        );
       }
       return new Response(httpsResponse.get(requestedKey), {
         headers: { "content-type": "text/html;charset=UTF-8" },
       });
     }
-    throw new Error(`The requested key "${requestedKey}" is not valid`);
+    throw new WhoamiError(
+      WhoamiErrorType.NOT_VALID,
+      `The requested key "${requestedKey}" is not valid`,
+      405
+    );
   }
 
   httpsResponse.forEach((value, key) => {
     if (REQUIRED_KEYS.includes(key) && value === undefined) {
-      throw new Error(`Value for required key "${key}" is undefined`);
+      throw new WhoamiError(
+        WhoamiErrorType.MISSING_KEY_VALUE,
+        `Value for required key "${key}" is undefined`
+      );
     }
   });
 

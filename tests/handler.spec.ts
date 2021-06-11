@@ -1,4 +1,8 @@
-import { handleRequestWrapper } from "../src/handler";
+import {
+  handleRequestWrapper,
+  WhoamiError,
+  WhoamiErrorType,
+} from "../src/handler";
 import { MockedSentry } from "./mock";
 
 class MockResponse {
@@ -64,7 +68,7 @@ describe("Handler", function () {
       },
       MockSentry
     );
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(405);
     expect(MockSentry.captureException).toBeCalledWith(
       Error('The requested key "invalid" is not valid')
     );
@@ -94,7 +98,10 @@ describe("Handler", function () {
     );
     expect(response.status).toBe(500);
     expect(MockSentry.captureException).toBeCalledWith(
-      Error('Value for required key "timezone" is undefined')
+      new WhoamiError(
+        WhoamiErrorType.MISSING_KEY_VALUE,
+        'Value for required key "timezone" is undefined'
+      )
     );
   });
 
@@ -106,9 +113,13 @@ describe("Handler", function () {
       },
       MockSentry
     );
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(405);
     expect(MockSentry.captureException).toBeCalledWith(
-      Error("Requested key not allowed for http")
+      new WhoamiError(
+        WhoamiErrorType.NOT_ALLOWED,
+        "Requested key not allowed for http",
+        405
+      )
     );
   });
 
