@@ -1,3 +1,7 @@
+const countryTimeZoneFallback: Map<string, string> = new Map([
+  ["CN", "Asia/Shanghai"],
+]);
+
 export async function handleRequest(request: Request) {
   const requestUrl = new URL(request.url);
   if (!requestUrl.pathname.startsWith("/v1")) {
@@ -12,7 +16,8 @@ export async function handleRequest(request: Request) {
 
   const httpResponse: Map<string, any> = new Map(
     Object.entries({
-      timezone: request.cf.timezone,
+      timezone:
+        request.cf.timezone || countryTimeZoneFallback.get(request.cf.country),
       iso_time: date.toISOString(),
       timestamp: Math.round(date.getTime() / 1000),
     })
