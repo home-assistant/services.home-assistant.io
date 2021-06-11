@@ -1,6 +1,9 @@
 import Toucan from "toucan-js";
 
 const REQUIRED_KEYS = ["country", "timezone"];
+const countryTimeZoneFallback: Map<string, string> = new Map([
+  ["CN", "Asia/Shanghai"],
+]);
 
 export enum WhoamiErrorType {
   UNEXPECTED = "unexpected",
@@ -58,7 +61,8 @@ export async function handleRequest(request: Request, sentry: Toucan) {
 
   const httpResponse: Map<string, any> = new Map(
     Object.entries({
-      timezone: request.cf.timezone,
+      timezone:
+        request.cf.timezone || countryTimeZoneFallback.get(request.cf.country),
       iso_time: date.toISOString(),
       timestamp: Math.round(date.getTime() / 1000),
     })
