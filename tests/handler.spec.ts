@@ -88,7 +88,7 @@ describe("Handler", function () {
       {
         ...MockRequest,
         url: "http://example.com/v1",
-        cf: { timezone: undefined },
+        cf: { country: "XX", timezone: undefined },
       },
       MockSentry
     );
