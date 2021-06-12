@@ -1,9 +1,47 @@
+import Toucan from "toucan-js";
+
+const REQUIRED_KEYS = ["country", "timezone"];
 const countryTimeZoneFallback: Map<string, string> = new Map([
   ["CN", "Asia/Shanghai"],
 ]);
 
-export async function handleRequest(request: Request) {
+export enum WhoamiErrorType {
+  UNEXPECTED = "unexpected",
+  MISSING_KEY_VALUE = "missing_key_value",
+  NOT_VALID = "not_valid",
+  NOT_ALLOWED = "not_allowed",
+}
+
+export class WhoamiError extends Error {
+  code: number;
+  errorType: WhoamiErrorType;
+  constructor(errorType: WhoamiErrorType, message: string, code?: number) {
+    super(message);
+    this.name = `WhoamiError - ${errorType}`;
+    this.code = code || 500;
+    this.errorType = errorType;
+  }
+}
+
+export async function handleRequestWrapper(
+  request: Request,
+  sentry: Toucan
+): Promise<Response> {
+  try {
+    return await handleRequest(request, sentry);
+  } catch (e) {
+    if (!(e instanceof WhoamiError)) {
+      e = new WhoamiError(WhoamiErrorType.UNEXPECTED, e.message);
+    }
+    sentry.addBreadcrumb({ message: e.message });
+    sentry.captureException(e);
+    return new Response(e.errorType, { status: e.code });
+  }
+}
+
+export async function handleRequest(request: Request, sentry: Toucan) {
   const requestUrl = new URL(request.url);
+
   if (!requestUrl.pathname.startsWith("/v1")) {
     // Redirect non /v1 paths to the repository
     return Response.redirect(
@@ -11,6 +49,13 @@ export async function handleRequest(request: Request) {
       301
     );
   }
+
+  sentry.setExtra("requestId", request.headers.get("cf-request-id"));
+  sentry.setExtra("requestUrl", {
+    protocol: requestUrl.protocol,
+    pathname: requestUrl.pathname,
+    url: requestUrl,
+  });
 
   const date = new Date();
 
@@ -38,6 +83,8 @@ export async function handleRequest(request: Request) {
     })
   );
 
+  sentry.setExtras(Object.fromEntries(httpsResponse));
+
   const requestedKey = requestUrl.pathname.startsWith("/v1/")
     ? requestUrl.pathname.substr(4)
     : undefined;
@@ -45,17 +92,31 @@ export async function handleRequest(request: Request) {
   if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
-        return new Response(null, { status: 405 });
+        throw new WhoamiError(
+          WhoamiErrorType.NOT_ALLOWED,
+          "Requested key not allowed for http",
+          405
+        );
       }
       return new Response(httpsResponse.get(requestedKey), {
         headers: { "content-type": "text/html;charset=UTF-8" },
       });
     }
-    return new Response(`The requested key "${requestedKey}" is not valid`, {
-      headers: { "content-type": "text/html;charset=UTF-8" },
-      status: 400,
-    });
+    throw new WhoamiError(
+      WhoamiErrorType.NOT_VALID,
+      `The requested key "${requestedKey}" is not valid`,
+      405
+    );
   }
+
+  httpsResponse.forEach((value, key) => {
+    if (REQUIRED_KEYS.includes(key) && value === undefined) {
+      throw new WhoamiError(
+        WhoamiErrorType.MISSING_KEY_VALUE,
+        `Value for required key "${key}" is undefined`
+      );
+    }
+  });
 
   return new Response(
     JSON.stringify(
