@@ -42,10 +42,23 @@ describe("Handler", function () {
   });
 
   it("Regular base request", async () => {
+    MockRequest.cf.country = "US";
     const response = await handleRequestWrapper(MockRequest, MockSentry);
     const result = await response.json();
     expect(result.ip).toBe("1.2.3.4");
     expect(result.timezone).toBeDefined();
+    expect(result.currency).toBe("USD");
+  });
+
+  it("Currency", async () => {
+    const response1 = await handleRequestWrapper(MockRequest, MockSentry);
+    const result1 = await response1.json();
+    expect(result1.currency).toBe(null);
+
+    MockRequest.cf.country = "US";
+    const response2 = await handleRequestWrapper(MockRequest, MockSentry);
+    const result2 = await response2.json();
+    expect(result2.currency).toBe("USD");
   });
 
   it("Request single key", async () => {
@@ -85,6 +98,7 @@ describe("Handler", function () {
     const result = await response.json();
     expect(result.ip).not.toBeDefined();
     expect(result.timezone).toBeDefined();
+    expect(result.currency).not.toBeDefined();
   });
 
   it("Missing required key", async () => {
