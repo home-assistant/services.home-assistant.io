@@ -1,4 +1,5 @@
 import Toucan from "toucan-js";
+import { countryCurrency } from "./data/currency";
 
 const REQUIRED_KEYS = ["country", "timezone"];
 const countryTimeZoneFallback: Map<string, string> = new Map([
@@ -74,6 +75,7 @@ export async function handleRequest(request: Request, sentry: Toucan) {
       city: request.cf.city,
       continent: request.cf.continent,
       country: request.cf.country,
+      currency: countryCurrency[request.cf.country] || null,
       latitude: request.cf.latitude,
       longitude: request.cf.longitude,
       postal_code: request.cf.postalCode,
