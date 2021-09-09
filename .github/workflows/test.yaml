@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  NODE_VERSION: "14.2.0"
+  NODE_VERSION: "14.17.5"
 
 jobs:
   build:
