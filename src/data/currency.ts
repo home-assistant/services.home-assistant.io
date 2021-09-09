@@ -24,7 +24,7 @@ export const countryCurrency = {
   BR: "BRL",
   BS: "BSD",
   JE: "GBP",
-  BY: "BYR",
+  BY: "BYN",
   BZ: "BZD",
   RU: "RUB",
   RW: "RWF",

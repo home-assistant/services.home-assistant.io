@@ -9,7 +9,7 @@ on:
       - published
 
 env:
-  WRANGLER_VERSION: "1.19.0"
+  WRANGLER_VERSION: "1.19.2"
   NODE_VERSION: "14.17.5"
 
 jobs:
