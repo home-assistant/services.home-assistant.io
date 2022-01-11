@@ -36,7 +36,10 @@ export async function handleRequestWrapper(
     }
     sentry.addBreadcrumb({ message: e.message });
     sentry.captureException(e);
-    return new Response(e.errorType, { status: e.code });
+    return new Response(e.errorType, {
+      status: e.code,
+      headers: { "Access-Control-Allow-Origin": "*" },
+    });
   }
 }
 
@@ -101,7 +104,10 @@ export async function handleRequest(request: Request, sentry: Toucan) {
         );
       }
       return new Response(httpsResponse.get(requestedKey), {
-        headers: { "content-type": "text/html;charset=UTF-8" },
+        headers: {
+          "content-type": "text/html;charset=UTF-8",
+          "Access-Control-Allow-Origin": "*",
+        },
       });
     }
     throw new WhoamiError(
@@ -131,6 +137,7 @@ export async function handleRequest(request: Request, sentry: Toucan) {
     {
       headers: {
         "content-type": "application/json;charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
       },
     }
   );
