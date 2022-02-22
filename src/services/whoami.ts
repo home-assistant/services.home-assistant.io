@@ -1,6 +1,6 @@
 import Toucan from "toucan-js";
-import { ServiceError } from "./common";
-import { countryCurrency } from "./data/currency";
+import { ServiceError } from "../common";
+import { countryCurrency } from "../data/currency";
 
 const REQUIRED_KEYS = ["country", "timezone"];
 const countryTimeZoneFallback: Map<string, string> = new Map([

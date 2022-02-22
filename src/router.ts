@@ -1,6 +1,6 @@
 import Toucan from "toucan-js";
 import { ServiceError } from "./common";
-import { whoamiHandler } from "./whoami";
+import { whoamiHandler } from "./services/whoami";
 
 export async function routeRequest(sentry: Toucan, event: FetchEvent) {
   let requestUrl = new URL(event.request.url);

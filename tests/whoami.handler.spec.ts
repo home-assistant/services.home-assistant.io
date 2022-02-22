@@ -1,6 +1,6 @@
 import { MockedSentry, MockResponse } from "./mock";
-import { WhoamiErrorType, whoamiHandler } from "../src/whoami";
-import { handleRequestWrapper, routeRequest } from "../src/router";
+import { WhoamiErrorType } from "../src/services/whoami";
+import { routeRequest } from "../src/router";
 import { ServiceError } from "../src/common";
 
 describe("Handler", function () {
