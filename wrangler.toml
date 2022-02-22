@@ -11,6 +11,6 @@ routes = ["*whoami.home-assistant.io/*", "*services.home-assistant.io/*"]
 vars = {WORKER_ENV = "production"}
 
 # For dev environment, use '-e dev'
-[env.whoami-dev]
+[env.dev]
 workers_dev = true
 vars = {WORKER_ENV = "dev"}
