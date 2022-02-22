@@ -86,9 +86,10 @@ describe("Handler", function () {
 
     expect(response.status).toBe(500);
     expect(MockSentry.captureException).toBeCalledWith(
-      new ServiceError('Value for required key "timezone" is undefined', {
-        errorType: WhoamiErrorType.MISSING_KEY_VALUE,
-      })
+      new ServiceError(
+        'Value for required key "timezone" is undefined',
+        WhoamiErrorType.MISSING_KEY_VALUE
+      )
     );
   });
 
@@ -98,10 +99,11 @@ describe("Handler", function () {
 
     expect(response.status).toBe(405);
     expect(MockSentry.captureException).toBeCalledWith(
-      new ServiceError("Requested key not allowed for http", {
-        errorType: WhoamiErrorType.NOT_ALLOWED,
-        code: 405,
-      })
+      new ServiceError(
+        "Requested key not allowed for http",
+        WhoamiErrorType.NOT_ALLOWED,
+        405
+      )
     );
   });
 

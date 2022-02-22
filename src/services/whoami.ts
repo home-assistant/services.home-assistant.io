@@ -66,10 +66,11 @@ export async function whoamiHandler(
   if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
-        throw new ServiceError("Requested key not allowed for http", {
-          errorType: WhoamiErrorType.NOT_ALLOWED,
-          code: 405,
-        });
+        throw new ServiceError(
+          "Requested key not allowed for http",
+          WhoamiErrorType.NOT_ALLOWED,
+          405
+        );
       }
       return new Response(httpsResponse.get(requestedKey), {
         headers: {
@@ -78,17 +79,19 @@ export async function whoamiHandler(
         },
       });
     }
-    throw new ServiceError(`The requested key "${requestedKey}" is not valid`, {
-      errorType: WhoamiErrorType.NOT_VALID,
-      code: 405,
-    });
+    throw new ServiceError(
+      `The requested key "${requestedKey}" is not valid`,
+      WhoamiErrorType.NOT_VALID,
+      405
+    );
   }
 
   httpsResponse.forEach((value, key) => {
     if (REQUIRED_KEYS.includes(key) && value === undefined) {
-      throw new ServiceError(`Value for required key "${key}" is undefined`, {
-        errorType: WhoamiErrorType.MISSING_KEY_VALUE,
-      });
+      throw new ServiceError(
+        `Value for required key "${key}" is undefined`,
+        WhoamiErrorType.MISSING_KEY_VALUE
+      );
     }
   });
 

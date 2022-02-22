@@ -7,6 +7,5 @@ declare global {
 }
 
 addEventListener("fetch", (event: FetchEvent) => {
-  const sentry = sentryClient(event);
-  event.respondWith(routeRequest(sentry, event));
+  event.respondWith(routeRequest(sentryClient(event), event));
 });

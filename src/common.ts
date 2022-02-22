@@ -3,14 +3,11 @@ import Toucan from "toucan-js";
 export class ServiceError extends Error {
   code: number;
   errorType?: string;
-  constructor(
-    message: string,
-    options?: { errorType?: string; code?: number }
-  ) {
+  constructor(message: string, errorType?: string, code?: number) {
     super(message);
-    this.name = `ServiceError - ${options?.errorType || message}`;
-    this.code = options?.code || 500;
-    this.errorType = options?.errorType;
+    this.name = `ServiceError - ${errorType || message}`;
+    this.code = code || 500;
+    this.errorType = errorType;
   }
 }
 
