@@ -8,7 +8,7 @@ IP Based GEO lookup
 
 ### Adress structure
 
-`[schema]://services.home-assistant.io/whoami/[key]`
+`[schema]://services.home-assistant.io/whoami/v1/[key]`
 
 | placeholder | required | description                                                 |
 | ----------- | -------- | ----------------------------------------------------------- |
