@@ -1,4 +1,5 @@
 import Toucan from "toucan-js";
+import { ServiceError } from "./common";
 import { countryCurrency } from "./data/currency";
 
 const REQUIRED_KEYS = ["country", "timezone"];
@@ -13,39 +14,11 @@ export enum WhoamiErrorType {
   NOT_ALLOWED = "not_allowed",
 }
 
-export class WhoamiError extends Error {
-  code: number;
-  errorType: WhoamiErrorType;
-  constructor(errorType: WhoamiErrorType, message: string, code?: number) {
-    super(message);
-    this.name = `WhoamiError - ${errorType}`;
-    this.code = code || 500;
-    this.errorType = errorType;
-  }
-}
-
-export async function handleRequestWrapper(
+export async function whoamiHandler(
+  requestUrl: URL,
   request: Request,
   sentry: Toucan
-): Promise<Response> {
-  try {
-    return await handleRequest(request, sentry);
-  } catch (e) {
-    if (!(e instanceof WhoamiError)) {
-      e = new WhoamiError(WhoamiErrorType.UNEXPECTED, e.message);
-    }
-    sentry.addBreadcrumb({ message: e.message });
-    sentry.captureException(e);
-    return new Response(e.errorType, {
-      status: e.code,
-      headers: { "Access-Control-Allow-Origin": "*" },
-    });
-  }
-}
-
-export async function handleRequest(request: Request, sentry: Toucan) {
-  const requestUrl = new URL(request.url);
-
+) {
   if (!requestUrl.pathname.startsWith("/v1")) {
     // Redirect non /v1 paths to the repository
     return Response.redirect(
@@ -97,7 +70,7 @@ export async function handleRequest(request: Request, sentry: Toucan) {
   if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
-        throw new WhoamiError(
+        throw new ServiceError(
           WhoamiErrorType.NOT_ALLOWED,
           "Requested key not allowed for http",
           405
@@ -110,7 +83,7 @@ export async function handleRequest(request: Request, sentry: Toucan) {
         },
       });
     }
-    throw new WhoamiError(
+    throw new ServiceError(
       WhoamiErrorType.NOT_VALID,
       `The requested key "${requestedKey}" is not valid`,
       405
@@ -119,7 +92,7 @@ export async function handleRequest(request: Request, sentry: Toucan) {
 
   httpsResponse.forEach((value, key) => {
     if (REQUIRED_KEYS.includes(key) && value === undefined) {
-      throw new WhoamiError(
+      throw new ServiceError(
         WhoamiErrorType.MISSING_KEY_VALUE,
         `Value for required key "${key}" is undefined`
       );

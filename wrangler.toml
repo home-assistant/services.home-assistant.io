@@ -1,4 +1,4 @@
-name = "whoami-v1"
+name = "services"
 type = "webpack"
 webpack_config = "webpack.config.js"
 account_id = "dc9f963dfa4a630ca83eda7ccd8f363d"
@@ -7,10 +7,10 @@ account_id = "dc9f963dfa4a630ca83eda7ccd8f363d"
 # For production environment, use '-e production'
 [env.production]
 zone_id = "0ba583492080d3db28c103574f1d19cf"
-route = "*whoami.home-assistant.io/*"
+routes = ["*whoami.home-assistant.io/*", "*services.home-assistant.io/*"]
 vars = {WORKER_ENV = "production"}
 
 # For dev environment, use '-e dev'
-[env.dev]
+[env.whoami-dev]
 workers_dev = true
 vars = {WORKER_ENV = "dev"}

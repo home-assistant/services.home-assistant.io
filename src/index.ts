@@ -1,5 +1,6 @@
 import Toucan from "toucan-js";
-import { handleRequestWrapper } from "./handler";
+import { handleRequestWrapper } from "./common";
+import { whoamiHandler } from "./whoami";
 
 declare global {
   const SENTRY_DSN: string;
@@ -17,9 +18,27 @@ const sentryClient = (event: FetchEvent | ScheduledEvent) => {
 };
 
 addEventListener("fetch", (event: FetchEvent) => {
-  if (event.request.method === "GET") {
-    event.respondWith(handleRequestWrapper(event.request, sentryClient(event)));
-  } else {
-    event.respondWith(new Response(null, { status: 405 }));
+  const sentry = sentryClient(event);
+  let requestUrl = new URL(event.request.url);
+
+  if (requestUrl.host.startsWith("whoami")) {
+    // Legacy "rewrite" for old whoami address
+    requestUrl = new URL(
+      `${requestUrl.protocol}//services.home-assistant.io/whoami${requestUrl.pathname}`
+    );
+  }
+
+  const service = requestUrl.pathname.split("/")[1];
+  sentry.setTag("service", service);
+
+  switch (service) {
+    case "whoami":
+      event.respondWith(
+        handleRequestWrapper(requestUrl, event.request, sentry, whoamiHandler)
+      );
+      break;
+
+    default:
+      event.respondWith(new Response(null, { status: 405 }));
   }
 });

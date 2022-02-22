@@ -1,20 +1,24 @@
-# whoami.home-assistant.io
+# services.home-assistant.io
 
-API running as a [worker](https://workers.cloudflare.com/) in [Cloudflare's](https://www.cloudflare.com/) network.
+Home Assistant web services running on CloudFlare [workers](https://workers.cloudflare.com/)
 
-## Adress structure
+## whoami
 
-`[schema]://whoami.home-assistant.io/v1/[key]`
+IP Based GEO lookup
+
+### Adress structure
+
+`[schema]://services.home-assistant.io/whoami/[key]`
 
 | placeholder | required | description                                                 |
 | ----------- | -------- | ----------------------------------------------------------- |
 | `schema`    | True     | Use `http` or `https`                                       |
 | `key`       | False    | Return a single key from the regular JSON response as text. |
 
-## Examples
+### Examples
 
 ```bash
-curl -sSL https://whoami.home-assistant.io/v1
+curl -sSL https://services.home-assistant.io/whoami/v1
 {
   "ip": "1.2.3.4",
   "city": "Gotham",
@@ -33,6 +37,6 @@ curl -sSL https://whoami.home-assistant.io/v1
 ```
 
 ```bash
-curl -sSL https://whoami.home-assistant.io/v1/ip
+curl -sSL https://services.home-assistant.io/whoami/v1/ip
 1.2.3.4
 ```
