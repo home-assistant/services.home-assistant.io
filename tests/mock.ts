@@ -7,3 +7,22 @@ export const MockedSentry = () => ({
   captureException: jest.fn(),
   captureMessage: jest.fn(),
 });
+
+export class MockResponse {
+  body: string;
+  status: number = 200;
+  headers: Map<string, string> = new Map();
+  constructor(body: string, data: any) {
+    this.body = body;
+    if (data) {
+      this.status = data.status || 200;
+      this.headers = new Map(Object.entries(data.headers || {}));
+    }
+  }
+  async json() {
+    return JSON.parse(this.body);
+  }
+  async text() {
+    return this.body;
+  }
+}

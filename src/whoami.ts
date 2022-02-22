@@ -19,23 +19,19 @@ export async function whoamiHandler(
   request: Request,
   sentry: Toucan
 ) {
-  if (!requestUrl.pathname.startsWith("/v1")) {
+  if (request.method !== "GET") {
+    return new Response(null, { status: 405 });
+  }
+
+  if (!requestUrl.pathname.startsWith("/whoami/v1")) {
     // Redirect non /v1 paths to the repository
     return Response.redirect(
-      "https://github.com/home-assistant/whoami.home-assistant.io",
+      "https://github.com/home-assistant/services.home-assistant.io",
       301
     );
   }
 
-  sentry.setExtra("requestId", request.headers.get("cf-request-id"));
-  sentry.setExtra("requestUrl", {
-    protocol: requestUrl.protocol,
-    pathname: requestUrl.pathname,
-    url: requestUrl,
-  });
-
   const date = new Date();
-
   const httpResponse: Map<string, any> = new Map(
     Object.entries({
       timezone:
@@ -63,18 +59,17 @@ export async function whoamiHandler(
 
   sentry.setExtras(Object.fromEntries(httpsResponse));
 
-  const requestedKey = requestUrl.pathname.startsWith("/v1/")
-    ? requestUrl.pathname.substr(4)
+  const requestedKey = requestUrl.pathname.startsWith("/whoami/v1/")
+    ? requestUrl.pathname.substr(11)
     : undefined;
 
   if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
-        throw new ServiceError(
-          WhoamiErrorType.NOT_ALLOWED,
-          "Requested key not allowed for http",
-          405
-        );
+        throw new ServiceError("Requested key not allowed for http", {
+          errorType: WhoamiErrorType.NOT_ALLOWED,
+          code: 405,
+        });
       }
       return new Response(httpsResponse.get(requestedKey), {
         headers: {
@@ -83,19 +78,17 @@ export async function whoamiHandler(
         },
       });
     }
-    throw new ServiceError(
-      WhoamiErrorType.NOT_VALID,
-      `The requested key "${requestedKey}" is not valid`,
-      405
-    );
+    throw new ServiceError(`The requested key "${requestedKey}" is not valid`, {
+      errorType: WhoamiErrorType.NOT_VALID,
+      code: 405,
+    });
   }
 
   httpsResponse.forEach((value, key) => {
     if (REQUIRED_KEYS.includes(key) && value === undefined) {
-      throw new ServiceError(
-        WhoamiErrorType.MISSING_KEY_VALUE,
-        `Value for required key "${key}" is undefined`
-      );
+      throw new ServiceError(`Value for required key "${key}" is undefined`, {
+        errorType: WhoamiErrorType.MISSING_KEY_VALUE,
+      });
     }
   });
 
