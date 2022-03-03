@@ -1,5 +1,6 @@
 import Toucan from "toucan-js";
-import { countryCurrency } from "./data/currency";
+import { ServiceError } from "../common";
+import { countryCurrency } from "../data/currency";
 
 const REQUIRED_KEYS = ["country", "timezone"];
 const countryTimeZoneFallback: Map<string, string> = new Map([
@@ -13,56 +14,24 @@ export enum WhoamiErrorType {
   NOT_ALLOWED = "not_allowed",
 }
 
-export class WhoamiError extends Error {
-  code: number;
-  errorType: WhoamiErrorType;
-  constructor(errorType: WhoamiErrorType, message: string, code?: number) {
-    super(message);
-    this.name = `WhoamiError - ${errorType}`;
-    this.code = code || 500;
-    this.errorType = errorType;
-  }
-}
-
-export async function handleRequestWrapper(
+export async function whoamiHandler(
+  requestUrl: URL,
   request: Request,
   sentry: Toucan
-): Promise<Response> {
-  try {
-    return await handleRequest(request, sentry);
-  } catch (e) {
-    if (!(e instanceof WhoamiError)) {
-      e = new WhoamiError(WhoamiErrorType.UNEXPECTED, e.message);
-    }
-    sentry.addBreadcrumb({ message: e.message });
-    sentry.captureException(e);
-    return new Response(e.errorType, {
-      status: e.code,
-      headers: { "Access-Control-Allow-Origin": "*" },
-    });
+) {
+  if (request.method !== "GET") {
+    return new Response(null, { status: 405 });
   }
-}
 
-export async function handleRequest(request: Request, sentry: Toucan) {
-  const requestUrl = new URL(request.url);
-
-  if (!requestUrl.pathname.startsWith("/v1")) {
+  if (!requestUrl.pathname.startsWith("/whoami/v1")) {
     // Redirect non /v1 paths to the repository
     return Response.redirect(
-      "https://github.com/home-assistant/whoami.home-assistant.io",
+      "https://github.com/home-assistant/services.home-assistant.io",
       301
     );
   }
 
-  sentry.setExtra("requestId", request.headers.get("cf-request-id"));
-  sentry.setExtra("requestUrl", {
-    protocol: requestUrl.protocol,
-    pathname: requestUrl.pathname,
-    url: requestUrl,
-  });
-
   const date = new Date();
-
   const httpResponse: Map<string, any> = new Map(
     Object.entries({
       timezone:
@@ -90,16 +59,16 @@ export async function handleRequest(request: Request, sentry: Toucan) {
 
   sentry.setExtras(Object.fromEntries(httpsResponse));
 
-  const requestedKey = requestUrl.pathname.startsWith("/v1/")
-    ? requestUrl.pathname.substr(4)
+  const requestedKey = requestUrl.pathname.startsWith("/whoami/v1/")
+    ? requestUrl.pathname.substr(11)
     : undefined;
 
   if (requestedKey !== undefined) {
     if (httpsResponse.has(requestedKey)) {
       if (requestUrl.protocol === "http:" && !httpResponse.has(requestedKey)) {
-        throw new WhoamiError(
-          WhoamiErrorType.NOT_ALLOWED,
+        throw new ServiceError(
           "Requested key not allowed for http",
+          WhoamiErrorType.NOT_ALLOWED,
           405
         );
       }
@@ -110,18 +79,18 @@ export async function handleRequest(request: Request, sentry: Toucan) {
         },
       });
     }
-    throw new WhoamiError(
-      WhoamiErrorType.NOT_VALID,
+    throw new ServiceError(
       `The requested key "${requestedKey}" is not valid`,
+      WhoamiErrorType.NOT_VALID,
       405
     );
   }
 
   httpsResponse.forEach((value, key) => {
     if (REQUIRED_KEYS.includes(key) && value === undefined) {
-      throw new WhoamiError(
-        WhoamiErrorType.MISSING_KEY_VALUE,
-        `Value for required key "${key}" is undefined`
+      throw new ServiceError(
+        `Value for required key "${key}" is undefined`,
+        WhoamiErrorType.MISSING_KEY_VALUE
       );
     }
   });
