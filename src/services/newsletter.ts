@@ -56,10 +56,23 @@ export async function newsletterHandler(
     );
   }
 
-  return new Response(null, {
+  return new Response(SUCCESS_MESSAGE, {
     status: 201,
     headers: {
       "Access-Control-Allow-Origin": "*",
+      "Content-Type": "text/html",
     },
   });
 }
+
+const SUCCESS_MESSAGE = `
+<html>
+  <head>
+    <title>Success</title>
+  </head>
+  <body>
+    <p>You are now subscribed to the Home Assistant Newsletter 🎉</p>
+    <button onclick="window.close();">Close</button>
+  </body>
+</html>
+`;
