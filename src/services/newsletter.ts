@@ -65,7 +65,7 @@ export async function newsletterHandler(
   });
 }
 
-const SUCCESS_MESSAGE = `
+export const SUCCESS_MESSAGE = `
 <html>
   <head>
     <title>Success</title>

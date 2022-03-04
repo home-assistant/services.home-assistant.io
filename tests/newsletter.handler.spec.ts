@@ -1,5 +1,6 @@
 import { MockedSentry, MockResponse } from "./mock";
 import { routeRequest } from "../src/router";
+import { SUCCESS_MESSAGE } from "../src/services/newsletter";
 
 describe("Handler", function () {
   let MockRequest: any;
@@ -36,7 +37,7 @@ describe("Handler", function () {
   it("Regular base request", async () => {
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe(null);
+    expect(result).toBe(SUCCESS_MESSAGE);
     expect(response.status).toBe(201);
   });
 
