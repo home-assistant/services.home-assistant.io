@@ -18,7 +18,7 @@ export async function whoamiHandler(
   requestUrl: URL,
   request: Request,
   sentry: Toucan
-) {
+): Promise<Response> {
   if (request.method !== "GET") {
     return new Response(null, { status: 405 });
   }

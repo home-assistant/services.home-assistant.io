@@ -1,5 +1,6 @@
 import Toucan from "toucan-js";
 import { ServiceError } from "./common";
+import { newsletterHandler } from "./services/newsletter";
 import { whoamiHandler } from "./services/whoami";
 
 export async function routeRequest(sentry: Toucan, event: FetchEvent) {
@@ -28,6 +29,14 @@ export async function routeRequest(sentry: Toucan, event: FetchEvent) {
         event.request,
         sentry,
         whoamiHandler
+      );
+
+    case "newsletter":
+      return handleRequestWrapper(
+        requestUrl,
+        event.request,
+        sentry,
+        newsletterHandler
       );
 
     default:

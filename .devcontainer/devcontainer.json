@@ -1,5 +1,5 @@
 {
-    "name": "whoami.home-assistant.io",
+    "name": "services.home-assistant.io",
     "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:14",
     "context": "..",
     "remoteEnv": {
