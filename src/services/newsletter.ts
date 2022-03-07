@@ -64,7 +64,7 @@ export async function newsletterHandler(
       data = await response.json<Record<string, any>>();
     } catch (err: any) {
       throw new ServiceError(
-        "Could not parse error",
+        "Could not subscribe (unknown error)",
         NewsletterErrorType.SUBSCRIPTION
       );
     }
