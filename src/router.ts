@@ -62,9 +62,20 @@ export async function handleRequestWrapper(
     }
     sentry.addBreadcrumb({ message: err.message });
     sentry.captureException(err);
-    return new Response(err.errorType, {
+
+    let returnBody: string;
+    const headers = { "Access-Control-Allow-Origin": "*" };
+
+    if ((request.headers.get("accept") || "").includes("json")) {
+      returnBody = JSON.stringify({ error: err.message });
+      headers["content-type"] = "application/json;charset=UTF-8";
+    } else {
+      returnBody = err.message;
+    }
+
+    return new Response(returnBody, {
       status: err.code,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers,
     });
   }
 }
