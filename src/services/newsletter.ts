@@ -53,7 +53,7 @@ export async function newsletterHandler(
     const data = await response.json<Record<string, any>>();
     sentry.addBreadcrumb({ data, level: "error" });
     throw new ServiceError(
-      data.error?.message || "Could not subscribe",
+      data.error.message || "Could not subscribe",
       NewsletterErrorType.SUBSCRIPTION
     );
   }
