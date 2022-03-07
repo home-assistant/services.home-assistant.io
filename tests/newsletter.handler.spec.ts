@@ -81,7 +81,7 @@ describe("Handler", function () {
   });
 
   it("Failed subscription", async () => {
-    (global as any).fetch = async () => new MockResponse("", { ok: false });
+    (global as any).fetch = async () => new MockResponse("{}", { ok: false });
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
     expect(result).toBe("subscription");
