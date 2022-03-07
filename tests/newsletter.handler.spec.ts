@@ -45,7 +45,7 @@ describe("Handler", function () {
     MockEvent.request.method = "GET";
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("Invalid request");
+    expect(result).toBe("not_valid");
     expect(response.status).toBe(400);
   });
 
@@ -53,7 +53,7 @@ describe("Handler", function () {
     MockEvent.request.url = "https://services.home-assistant.io/newsletter/bad";
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("Invalid request");
+    expect(result).toBe("not_valid");
     expect(response.status).toBe(400);
   });
 
@@ -66,7 +66,7 @@ describe("Handler", function () {
     );
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("Invalid request");
+    expect(result).toBe("not_valid");
     expect(response.status).toBe(400);
   });
 
@@ -76,7 +76,7 @@ describe("Handler", function () {
     });
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("Missing email");
+    expect(result).toBe("missing_email");
     expect(response.status).toBe(400);
   });
 
@@ -87,7 +87,7 @@ describe("Handler", function () {
       });
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("Test error message");
+    expect(result).toBe("subscription");
     expect(response.status).toBe(500);
   });
 });

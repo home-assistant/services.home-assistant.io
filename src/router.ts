@@ -67,10 +67,10 @@ export async function handleRequestWrapper(
     const headers = { "Access-Control-Allow-Origin": "*" };
 
     if ((request.headers.get("accept") || "").includes("json")) {
-      returnBody = JSON.stringify({ error: err.message });
+      returnBody = JSON.stringify({ error: err.errorType });
       headers["content-type"] = "application/json;charset=UTF-8";
     } else {
-      returnBody = err.message;
+      returnBody = err.errorType;
     }
 
     return new Response(returnBody, {
