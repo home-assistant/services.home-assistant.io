@@ -30,7 +30,7 @@ export async function newsletterHandler(
 
   if (!formData.has("email")) {
     throw new ServiceError(
-      "Missing email param",
+      "Missing email",
       NewsletterErrorType.MISSING_EMAIL,
       400
     );
