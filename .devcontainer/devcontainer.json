@@ -1,12 +1,12 @@
 {
     "name": "services.home-assistant.io",
-    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:14",
+    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
     "context": "..",
     "remoteEnv": {
       "PATH":"${containerEnv:PATH}:./node_modules/.bin",
       "DEVCONTAINER": "true"
     },
-    "postCreateCommand": "bash -i -c 'nvm install --lts' && yarn install",
+    "postCreateCommand": "bash -i -c 'nvm install' && yarn install",
     "appPort": ["8080:8080", "3001:3001"],
     "extensions": [
       "dbaeumer.vscode-eslint",
