@@ -40,18 +40,36 @@ export async function newsletterHandler(
 
   sentry.setUser({ email });
 
-  const response = await fetch(MAILERLITE_API, {
-    method: "POST",
-    body: JSON.stringify({ email }),
-    headers: {
-      "Content-Type": "application/json",
-      "X-MailerLite-ApiKey": MAILERLITE_API_KEY,
-    },
-  });
+  let response: Response;
+  let data: Record<string, any>;
+
+  try {
+    response = await fetch(MAILERLITE_API, {
+      method: "POST",
+      body: JSON.stringify({ email }),
+      headers: {
+        "Content-Type": "application/json",
+        "X-MailerLite-ApiKey": MAILERLITE_API_KEY,
+      },
+    });
+  } catch (err: any) {
+    throw new ServiceError(
+      "Could not subscribe",
+      NewsletterErrorType.SUBSCRIPTION
+    );
+  }
 
   if (!response.ok) {
-    const data = await response.json<Record<string, any>>();
-    sentry.addBreadcrumb({ data, level: "error" });
+    try {
+      data = await response.json<Record<string, any>>();
+    } catch (err: any) {
+      throw new ServiceError(
+        "Could not parse error",
+        NewsletterErrorType.SUBSCRIPTION
+      );
+    }
+
+    sentry.addBreadcrumb({ data });
     throw new ServiceError(
       data.error.message || "Could not subscribe",
       NewsletterErrorType.SUBSCRIPTION
