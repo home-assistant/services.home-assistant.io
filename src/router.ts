@@ -70,7 +70,7 @@ export async function handleRequestWrapper(
       returnBody = JSON.stringify({ error: err.errorType });
       headers["content-type"] = "application/json;charset=UTF-8";
     } else {
-      returnBody = err.errorType;
+      returnBody = `Error: ${err.errorType}`;
     }
 
     return new Response(returnBody, {

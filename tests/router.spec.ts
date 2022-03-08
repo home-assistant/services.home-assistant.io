@@ -45,7 +45,7 @@ describe("Handler", function () {
     );
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("not_valid");
+    expect(result).toBe("Error: not_valid");
   });
 
   it("Return error as text (without accept header)", async () => {
@@ -57,6 +57,6 @@ describe("Handler", function () {
     );
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("not_valid");
+    expect(result).toBe("Error: not_valid");
   });
 });
