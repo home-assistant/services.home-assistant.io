@@ -42,6 +42,7 @@ export async function newsletterHandler(
 
   let response: Response;
   let data: Record<string, any>;
+  let returnMessage: string | undefined;
 
   try {
     response = await fetch(MAILERLITE_API, {
@@ -70,14 +71,25 @@ export async function newsletterHandler(
     }
 
     sentry.addBreadcrumb({ data });
-    throw new ServiceError(
-      data.error.message || "Could not subscribe",
-      NewsletterErrorType.SUBSCRIPTION
-    );
+
+    // Some error messages can be usefull to send to the user
+    // Since we do not know all posibilities, we mantain an opt-in list
+    switch (data.error.message) {
+      case "Invalid email address":
+        returnMessage = `Invalid email address ${email}`;
+    }
+
+    // If no known error message, throw and return generic
+    if (!returnMessage) {
+      throw new ServiceError(
+        data.error.message || "Could not subscribe",
+        NewsletterErrorType.SUBSCRIPTION
+      );
+    }
   }
 
-  return new Response(SUCCESS_MESSAGE, {
-    status: 201,
+  return new Response(returnMessage || SUCCESS_MESSAGE, {
+    status: returnMessage ? 500 : 201,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "text/html;charset=UTF-8",
