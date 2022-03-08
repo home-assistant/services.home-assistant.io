@@ -80,7 +80,7 @@ export async function newsletterHandler(
     status: 201,
     headers: {
       "Access-Control-Allow-Origin": "*",
-      "Content-Type": "text/html",
+      "Content-Type": "text/html;charset=UTF-8",
     },
   });
 }
