@@ -5,7 +5,7 @@ export class ServiceError extends Error {
   errorType?: string;
   constructor(message: string, errorType?: string, code?: number) {
     super(message);
-    this.name = `ServiceError - ${errorType || message}`;
+    this.name = `ServiceError - ${message}`;
     this.code = code || 500;
     this.errorType = errorType;
   }
