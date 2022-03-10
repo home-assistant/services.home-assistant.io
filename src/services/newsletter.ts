@@ -77,6 +77,8 @@ export async function newsletterHandler(
     switch (data.error.message) {
       case "Invalid email address":
         returnMessage = `Invalid email address ${email}`;
+      case "Subscriber type is unconfirmed":
+        returnMessage = `${email} has already subscribed, but the email is not yet confirmed`;
     }
 
     // If no known error message, throw and return generic
