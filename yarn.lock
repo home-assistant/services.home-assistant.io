@@ -501,46 +501,46 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@sentry/core@6.11.0":
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-6.11.0.tgz#40e94043afcf6407a109be26655c77832c64e740"
-  integrity sha512-09TB+f3pqEq8LFahFWHO6I/4DxHo+NcS52OkbWMDqEi6oNZRD7PhPn3i14LfjsYVv3u3AESU8oxSEGbFrr2UjQ==
+"@sentry/core@6.19.6":
+  version "6.19.6"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-6.19.6.tgz#7d4649d0148b5d0be1358ab02e2f869bf7363e9a"
+  integrity sha512-biEotGRr44/vBCOegkTfC9rwqaqRKIpFljKGyYU6/NtzMRooktqOhjmjmItNCMRknArdeaQwA8lk2jcZDXX3Og==
   dependencies:
-    "@sentry/hub" "6.11.0"
-    "@sentry/minimal" "6.11.0"
-    "@sentry/types" "6.11.0"
-    "@sentry/utils" "6.11.0"
+    "@sentry/hub" "6.19.6"
+    "@sentry/minimal" "6.19.6"
+    "@sentry/types" "6.19.6"
+    "@sentry/utils" "6.19.6"
     tslib "^1.9.3"
 
-"@sentry/hub@6.11.0":
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-6.11.0.tgz#ddf9ddb0577d1c8290dc02c0242d274fe84d6c16"
-  integrity sha512-pT9hf+ZJfVFpoZopoC+yJmFNclr4NPqPcl2cgguqCHb69DklD1NxgBNWK8D6X05qjnNFDF991U6t1mxP9HrGuw==
+"@sentry/hub@6.19.6":
+  version "6.19.6"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-6.19.6.tgz#ada83ceca0827c49534edfaba018221bc1eb75e1"
+  integrity sha512-PuEOBZxvx3bjxcXmWWZfWXG+orojQiWzv9LQXjIgroVMKM/GG4QtZbnWl1hOckUj7WtKNl4hEGO2g/6PyCV/vA==
   dependencies:
-    "@sentry/types" "6.11.0"
-    "@sentry/utils" "6.11.0"
+    "@sentry/types" "6.19.6"
+    "@sentry/utils" "6.19.6"
     tslib "^1.9.3"
 
-"@sentry/minimal@6.11.0":
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-6.11.0.tgz#806d5512658370e40827b3e3663061db708fff33"
-  integrity sha512-XkZ7qrdlGp4IM/gjGxf1Q575yIbl5RvPbg+WFeekpo16Ufvzx37Mr8c2xsZaWosISVyE6eyFpooORjUlzy8EDw==
+"@sentry/minimal@6.19.6":
+  version "6.19.6"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-6.19.6.tgz#b6cced3708e25d322039e68ebdf8fadfa445bf7d"
+  integrity sha512-T1NKcv+HTlmd8EbzUgnGPl4ySQGHWMCyZ8a8kXVMZOPDzphN3fVIzkYzWmSftCWp0rpabXPt9aRF2mfBKU+mAQ==
   dependencies:
-    "@sentry/hub" "6.11.0"
-    "@sentry/types" "6.11.0"
+    "@sentry/hub" "6.19.6"
+    "@sentry/types" "6.19.6"
     tslib "^1.9.3"
 
-"@sentry/types@6.11.0":
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.11.0.tgz#5122685478d32ddacd3a891cbcf550012df85f7c"
-  integrity sha512-gm5H9eZhL6bsIy/h3T+/Fzzz2vINhHhqd92CjHle3w7uXdTdFV98i2pDpErBGNTSNzbntqOMifYEB5ENtZAvcg==
+"@sentry/types@6.19.6":
+  version "6.19.6"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-6.19.6.tgz#70513f9dca05d23d7ab9c2a6cb08d4db6763ca67"
+  integrity sha512-QH34LMJidEUPZK78l+Frt3AaVFJhEmIi05Zf8WHd9/iTt+OqvCHBgq49DDr1FWFqyYWm/QgW/3bIoikFpfsXyQ==
 
-"@sentry/utils@6.11.0":
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-6.11.0.tgz#d1dee4faf4d9c42c54bba88d5a66fb96b902a14c"
-  integrity sha512-IOvyFHcnbRQxa++jO+ZUzRvFHEJ1cZjrBIQaNVc0IYF0twUOB5PTP6joTcix38ldaLeapaPZ9LGfudbvYvxkdg==
+"@sentry/utils@6.19.6":
+  version "6.19.6"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-6.19.6.tgz#2ddc9ef036c3847084c43d0e5a55e4646bdf9021"
+  integrity sha512-fAMWcsguL0632eWrROp/vhPgI7sBj/JROWVPzpabwVkm9z3m1rQm6iLFn4qfkZL8Ozy6NVZPXOQ7EXmeU24byg==
   dependencies:
-    "@sentry/types" "6.11.0"
+    "@sentry/types" "6.19.6"
     tslib "^1.9.3"
 
 "@sinonjs/commons@^1.7.0":
@@ -590,10 +590,10 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/cookie@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.4.1.tgz#bfd02c1f2224567676c1545199f87c3a861d878d"
-  integrity sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==
+"@types/cookie@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.5.0.tgz#14ebcd209f2555e341548c31128d4deb34dfb2b0"
+  integrity sha512-CJWHVHHupxBYfIlMM+qzXx4dRKIV1VzOm0cP3Wpqten8MDx1tK+y92YDXUshN1ONAfwodvKxDNkw35/pNs+izg==
 
 "@types/eslint-scope@^3.7.3":
   version "3.7.3"
@@ -680,10 +680,10 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/uuid@8.3.1":
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.1.tgz#1a32969cf8f0364b3d8c8af9cc3555b7805df14f"
-  integrity sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==
+"@types/uuid@8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
 
 "@types/yargs-parser@*":
   version "20.2.0"
@@ -1376,10 +1376,10 @@ convert-source-map@^1.4.0, convert-source-map@^1.6.0, convert-source-map@^1.7.0:
   dependencies:
     safe-buffer "~5.1.1"
 
-cookie@0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.1.tgz#afd713fe26ebd21ba95ceb61f9a8116e50a537d1"
-  integrity sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==
+cookie@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.5.0.tgz#d1f5d71adec6558c58f389987c366aa47e994f8b"
+  integrity sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==
 
 copy-descriptor@^0.1.0:
   version "0.1.1"
@@ -4063,18 +4063,18 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
-toucan-js@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/toucan-js/-/toucan-js-2.5.0.tgz#049cd46237e34720c20607b0aabb564ea4cc1a51"
-  integrity sha512-kGC4aBI5ou0L6jIe+CqYxWjobknU7CTsgQOfHMFadSm8KLh/8f2oKgtqcmRB5Iysvai2/4vJDrFXqX/3K4iAjQ==
+toucan-js@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/toucan-js/-/toucan-js-2.6.0.tgz#d814ceb48dd1e4b2871aec1cd88eba4b1da6c015"
+  integrity sha512-gc1rvCuQhGnczs7Z9HLZNLXk2LW0He67DRsTm9bZX041bXJNJfOSQ3Eer1B0njkInMhsvZJh6EOI+Uga9o0jsw==
   dependencies:
-    "@sentry/core" "6.11.0"
-    "@sentry/hub" "6.11.0"
-    "@sentry/types" "6.11.0"
-    "@sentry/utils" "6.11.0"
-    "@types/cookie" "0.4.1"
-    "@types/uuid" "8.3.1"
-    cookie "0.4.1"
+    "@sentry/core" "6.19.6"
+    "@sentry/hub" "6.19.6"
+    "@sentry/types" "6.19.6"
+    "@sentry/utils" "6.19.6"
+    "@types/cookie" "0.5.0"
+    "@types/uuid" "8.3.4"
+    cookie "0.5.0"
     stacktrace-js "2.0.2"
     uuid "8.3.2"
 
