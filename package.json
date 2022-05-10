@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "@cloudflare/workers-types": "^3.9.0",
-    "@cloudflare/wrangler": "^1.19.11",
+    "@cloudflare/wrangler": "^1.19.12",
     "@types/jest": "^27.5.0",
     "@types/node": "^17.0.31",
     "jest": "^26.6.3",
