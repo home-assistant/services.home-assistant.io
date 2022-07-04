@@ -36,8 +36,8 @@ jobs:
           echo "::set-output name=environment::${environment}"
 
       - name: Publish ${{ steps.environment.outputs.environment }} worker
-        uses: cloudflare/wrangler-action@1.3.0
+        uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_WORKER_API_TOKEN }}
-          environment: ${{ steps.environment.outputs.environment }}
           wranglerVersion: ${{ env.WRANGLER_VERSION }}
+          command: publish --env ${{ steps.environment.outputs.environment }}
