@@ -214,7 +214,7 @@ export const countryCurrency = {
   LI: "CHF",
   LV: "EUR",
   TO: "TOP",
-  LT: "LTL",
+  LT: "EUR",
   LU: "EUR",
   LR: "LRD",
   LS: "LSL",
