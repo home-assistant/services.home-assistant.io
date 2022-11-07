@@ -20,3 +20,7 @@ export const sentryClient = (event: FetchEvent | ScheduledEvent) => {
   });
   return client;
 };
+
+export interface CfRequest extends Request {
+  cf?: IncomingRequestCfProperties;
+}

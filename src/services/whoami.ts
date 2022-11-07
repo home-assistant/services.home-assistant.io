@@ -1,5 +1,5 @@
 import Toucan from "toucan-js";
-import { ServiceError } from "../common";
+import { CfRequest, ServiceError } from "../common";
 import { countryCurrency } from "../data/currency";
 
 const REQUIRED_KEYS = ["country", "timezone"];
@@ -16,11 +16,15 @@ export enum WhoamiErrorType {
 
 export async function whoamiHandler(
   requestUrl: URL,
-  request: Request,
+  request: CfRequest,
   sentry: Toucan
 ): Promise<Response> {
   if (request.method !== "GET") {
     return new Response(null, { status: 405 });
+  }
+
+  if (!request.cf || !("continent" in request.cf)) {
+    return new Response(null, { status: 400 });
   }
 
   if (!requestUrl.pathname.startsWith("/whoami/v1")) {
