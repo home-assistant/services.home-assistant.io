@@ -20,7 +20,7 @@ describe("Handler", function () {
       url: MockRequestUrl.href,
       method: "GET",
       headers,
-      cf: { country: "XX", timezone: "Earth/Gotham" },
+      cf: { country: "XX", timezone: "Earth/Gotham", continent: "Elsa Island" },
     };
     MockEvent = { request: MockRequest };
   });
@@ -49,7 +49,11 @@ describe("Handler", function () {
 
   it("Request single key", async () => {
     MockEvent.request.url = "https://whoami.home-assistant.io/v1/ip";
-    MockEvent.request.cf = { country: "XX", timezone: undefined };
+    MockEvent.request.cf = {
+      country: "XX",
+      timezone: undefined,
+      continent: "Elsa Island",
+    };
     const response = await routeRequest(MockSentry, MockEvent);
 
     const result = await response.text();
@@ -58,7 +62,11 @@ describe("Handler", function () {
 
   it("Request invalid key", async () => {
     MockEvent.request.url = "http://whoami.home-assistant.io/v1/invalid";
-    MockEvent.request.cf = { country: "XX", timezone: undefined };
+    MockEvent.request.cf = {
+      country: "XX",
+      timezone: undefined,
+      continent: "Elsa Island",
+    };
     const response = await routeRequest(MockSentry, MockEvent);
 
     expect(response.status).toBe(405);
@@ -81,7 +89,11 @@ describe("Handler", function () {
 
   it("Missing required key", async () => {
     MockEvent.request.url = "http://whoami.home-assistant.io/v1";
-    MockEvent.request.cf = { country: "XX", timezone: undefined };
+    MockEvent.request.cf = {
+      country: "XX",
+      timezone: undefined,
+      continent: "Elsa Island",
+    };
     const response = await routeRequest(MockSentry, MockEvent);
 
     expect(response.status).toBe(500);
