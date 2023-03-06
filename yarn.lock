@@ -292,10 +292,10 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-3.17.0.tgz#8cee4499019daa6a23c9cc5501aa8382bb94d4da"
   integrity sha512-u0cUQ4ntWFFwn5jx0ETa2ItvwvfOMjyaKF2fX2vFVujrSgNES/PnvRzPAhdt9CMYAMidInm0MGkIjxHRsFBaeg==
 
-"@cloudflare/wrangler@^1.19.12":
-  version "1.19.12"
-  resolved "https://registry.yarnpkg.com/@cloudflare/wrangler/-/wrangler-1.19.12.tgz#17ff0ad7e816d3ea79069a31654d98328d4df75c"
-  integrity sha512-ALuQDzJetYGqzNuIa3KY8S8X9rvZjIh5uEY3nK31jV/EmBamiiSJn4XIdPuSn65FaEmmZem78OJIWFyu80OIuA==
+"@cloudflare/wrangler@^1.21.0":
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/wrangler/-/wrangler-1.21.0.tgz#d2d3cff9ed45170922cf927b7efd19d3858bc9a2"
+  integrity sha512-rsF1cGQT+CcTbk6d/s7c/CWOnKAtKi26LSkSbjDPnXsaEMso3RGRPWdStav/xmMLbvKOeDdtL8NDoxrtimrpQg==
   dependencies:
     axios "^0.21.1"
     rimraf "^3.0.2"
