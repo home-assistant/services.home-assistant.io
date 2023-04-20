@@ -59,7 +59,7 @@ export const countryCurrency = {
   OM: "OMR",
   TN: "TND",
   JO: "JOD",
-  HR: "HRK",
+  HR: "EUR",
   HT: "HTG",
   HU: "HUF",
   HK: "HKD",
