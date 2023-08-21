@@ -27,7 +27,7 @@ describe("Assist handler", function () {
     (global as any).fetch = async () => new MockResponse("");
 
     MockRequestUrl = new URL(
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=400&speed=3"
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=400&speed=3&wake_word=ok_nabu"
     );
     MockRequest = {
       url: MockRequestUrl.href,
@@ -104,21 +104,45 @@ describe("Assist handler", function () {
 
   it("rejects when missing speed", async () => {
     MockEvent.request.url =
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=400";
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=400&wake_word=ok_nabu";
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
-    expect((result as any).message).toContain("Invalid parameters: missing");
-    expect((result as any).message).toContain("speed");
+    expect((result as any).message).toStrictEqual(
+      "Invalid parameters: missing distance, speed or wake_word"
+    );
     expect(response.status).toBe(400);
   });
 
   it("rejects when missing distance", async () => {
     MockEvent.request.url =
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4";
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4&wake_word=ok_nabu";
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
-    expect((result as any).message).toContain("Invalid parameters: missing");
-    expect((result as any).message).toContain("distance");
+    expect((result as any).message).toStrictEqual(
+      "Invalid parameters: missing distance, speed or wake_word"
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it("rejects when missing wake_word", async () => {
+    MockEvent.request.url =
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4&distance=400";
+    const response = await routeRequest(MockSentry, MockEvent);
+    const result = await response.json();
+    expect((result as any).message).toStrictEqual(
+      "Invalid parameters: missing distance, speed or wake_word"
+    );
+    expect(response.status).toBe(400);
+  });
+
+  it("rejects when missing wake_word", async () => {
+    MockEvent.request.url =
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4&distance=400&wake_word=unknown";
+    const response = await routeRequest(MockSentry, MockEvent);
+    const result = await response.json();
+    expect((result as any).message).toStrictEqual(
+      "Invalid wake word, received: unknown"
+    );
     expect(response.status).toBe(400);
   });
 
