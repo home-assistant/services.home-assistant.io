@@ -1,7 +1,7 @@
 import Toucan from "toucan-js";
 
 enum TRIGGER_PATH {
-  WAKE_WORD_TRAINING_GET_UPLOAD_URL = "/assist/wake_word/training_data/upload",
+  WAKE_WORD_TRAINING_UPLOAD = "/assist/wake_word/training_data/upload",
 }
 const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
 const WAKE_WORD_MIN_CONTENT_LENGTH = 10 * 1024;
@@ -31,7 +31,7 @@ const getUserHash = async (request: Request): Promise<string> => {
   return hashHex;
 };
 
-const handleGetSignedUrl = async (request: Request): Promise<Response> => {
+const handleUploadAudioFile = async (request: Request): Promise<Response> => {
   const contentType = request.headers.get("content-type");
   const contentLength = parseInt(request.headers.get("content-length"), 10);
 
@@ -80,8 +80,8 @@ export async function assistHandler(
   sentry: Toucan
 ): Promise<Response> {
   switch (requestUrl.pathname) {
-    case TRIGGER_PATH.WAKE_WORD_TRAINING_GET_UPLOAD_URL:
-      return await handleGetSignedUrl(request);
+    case TRIGGER_PATH.WAKE_WORD_TRAINING_UPLOAD:
+      return await handleUploadAudioFile(request);
   }
 
   return createResponse({ content: "Not Found", status: 404 });
