@@ -33,7 +33,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "release" ]]; then
             environment="production"
           fi
-          echo "{environment}=${environment}" >> "$GITHUB_OUTPUT"
+          echo "environment=${environment}" >> "$GITHUB_OUTPUT"
 
       - name: Publish ${{ steps.environment.outputs.environment }} worker
         uses: cloudflare/wrangler-action@v3.1.0
