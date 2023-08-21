@@ -78,7 +78,6 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
   if (!WAKE_WORD_ALLOWED_NAMES.includes(wakeWord)) {
     return createResponse({
       content: { message: `Invalid wake word, received: ${wakeWord}` },
-      status: 400,
     });
   }
 
