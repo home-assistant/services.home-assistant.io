@@ -41,7 +41,6 @@ curl -sSL https://services.home-assistant.io/whoami/v1/ip
 1.2.3.4
 ```
 
-
 ## newsletter
 
 Signup service for the Home Assistant newsletter
@@ -49,3 +48,15 @@ Signup service for the Home Assistant newsletter
 POST URL: `https://services.home-assistant.io/newsletter/signup`
 
 This endpoint takes a form and the form needs to contain a `email` field with the email address that are signing up.
+
+## assist
+
+Services used for assist.
+
+### Upload wake word training data
+
+```bash
+curl --location --request PUT 'https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=[distance]&speed=[speed]' \
+--header 'Content-Type: audio/webm' \
+--data '@/data/file.webm'
+```

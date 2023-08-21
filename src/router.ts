@@ -2,6 +2,7 @@ import Toucan from "toucan-js";
 import { ServiceError } from "./common";
 import { newsletterHandler } from "./services/newsletter";
 import { whoamiHandler } from "./services/whoami";
+import { assistHandler } from "./services/assist";
 
 export async function routeRequest(sentry: Toucan, event: FetchEvent) {
   let requestUrl = new URL(event.request.url);
@@ -37,6 +38,14 @@ export async function routeRequest(sentry: Toucan, event: FetchEvent) {
         event.request,
         sentry,
         newsletterHandler
+      );
+
+    case "assist":
+      return handleRequestWrapper(
+        requestUrl,
+        event.request,
+        sentry,
+        assistHandler
       );
 
     default:
