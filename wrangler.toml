@@ -10,7 +10,7 @@ zone_id = "0ba583492080d3db28c103574f1d19cf"
 routes = ["*whoami.home-assistant.io/*", "*services.home-assistant.io/*"]
 vars = {WORKER_ENV = "production"}
 r2_buckets  = [
-	{ binding = "WAKEWORD_TRAINING_BUCKET", bucket_name = "assist-wakeword-training-data" }
+	{ binding = "WAKEWORD_TRAINING_BUCKET", bucket_name = "assist-wakeword-training-data", preview_bucket_name="assist-wakeword-training-data-test" }
 ]
 
 # For dev environment, use '-e dev'
@@ -18,5 +18,5 @@ r2_buckets  = [
 workers_dev = true
 vars = {WORKER_ENV = "dev"}
 r2_buckets  = [
-	{ binding = "WAKEWORD_TRAINING_BUCKET", bucket_name = "assist-wakeword-training-data" }
+	{ binding = "WAKEWORD_TRAINING_BUCKET", bucket_name = "assist-wakeword-training-data", preview_bucket_name="assist-wakeword-training-data-test" }
 ]
