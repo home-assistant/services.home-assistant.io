@@ -56,7 +56,7 @@ Services used for assist.
 ### Upload wake word training data
 
 ```bash
-curl --location --request PUT 'https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=[distance]&speed=[speed]' \
+curl --location --request PUT 'https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=[distance]&speed=[speed]&wake_word=[name]' \
 --header 'Content-Type: audio/webm' \
 --data '@/data/file.webm'
 ```

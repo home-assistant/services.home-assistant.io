@@ -4,6 +4,7 @@ enum TRIGGER_PATH {
   WAKE_WORD_TRAINING_UPLOAD = "/assist/wake_word/training_data/upload",
 }
 const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
+const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
 const WAKE_WORD_MIN_CONTENT_LENGTH = 10 * 1024;
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
 
@@ -38,6 +39,7 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
   const { searchParams } = new URL(request.url);
   const distance = searchParams.get("distance");
   const speed = searchParams.get("speed");
+  const wakeWord = searchParams.get("wake_word");
 
   if (request.method !== "PUT") {
     return createResponse({
@@ -64,15 +66,24 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
       },
       status: 413,
     });
-  } else if (!(distance && speed)) {
+  }
+  if (!(distance && speed && wakeWord)) {
     return createResponse({
-      content: { message: `Invalid parameters: missing distance or speed` },
+      content: {
+        message: `Invalid parameters: missing distance, speed or wake_word`,
+      },
+    });
+  }
+
+  if (!WAKE_WORD_ALLOWED_NAMES.includes(wakeWord)) {
+    return createResponse({
+      content: { message: `Invalid wake word, received: ${wakeWord}` },
     });
   }
 
   const date = new Date().toISOString().substring(0, 23).replace(/:/g, "-");
   const userHash = await getUserHash(request);
-  const key = `${date}-${distance}-${speed}-${userHash}.webm`;
+  const key = `${wakeWord}-${date}-${distance}-${speed}-${userHash}.webm`;
 
   await WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
