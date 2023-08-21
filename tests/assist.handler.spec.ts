@@ -1,5 +1,6 @@
 import { MockedSentry, MockResponse } from "./mock";
 import { routeRequest } from "../src/router";
+import { webcrypto } from "crypto";
 
 describe("Assist handler", function () {
   let MockRequest: any;
@@ -10,6 +11,9 @@ describe("Assist handler", function () {
   beforeAll(() => {
     (global as any).WAKEWORD_TRAINING_BUCKET = {
       put: jest.fn(),
+    };
+    (global as any).crypto = {
+      subtle: webcrypto.subtle,
     };
   });
 
@@ -120,9 +124,11 @@ describe("Assist handler", function () {
 
   it("uploads the file on R2", async () => {
     const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.text();
-    console.log(result);
+    const result: Record<string, string> = await response.json();
+
     expect(response.status).toBe(201);
+    expect(result.message).toStrictEqual("success");
+    expect(result.key.endsWith(".webm")).toBeTruthy();
     expect((global as any).WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(
       1
     );
