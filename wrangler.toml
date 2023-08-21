@@ -1,8 +1,8 @@
 name = "services"
-type = "webpack"
-webpack_config = "webpack.config.js"
 account_id = "dc9f963dfa4a630ca83eda7ccd8f363d"
-
+compatibility_date = "2022-01-23"
+main = "./src/index.ts"
+send_metrics = false
 
 # For production environment, use '-e production'
 [env.production]

@@ -6,12 +6,18 @@ on:
       - main
 
 env:
+  WRANGLER_VERSION: "3.5.1"
   NODE_VERSION: "16.14.0"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build worker
+    name: Build ${{ matrix.environment }} worker
+    strategy:
+      matrix:
+        environment:
+          - dev
+          - production
     steps:
       - uses: actions/checkout@v3.5.3
 
@@ -22,8 +28,11 @@ jobs:
       - name: Install packages
         run: yarn install
 
-      - name: Build
-        run: ./node_modules/.bin/wrangler build
+      - name: Build ${{ matrix.environment }} worker
+        uses: cloudflare/wrangler-action@3.1.0
+        with:
+          wranglerVersion: ${{ env.WRANGLER_VERSION }}
+          command: deploy --dry-run --env=${{ matrix.environment }}
 
   test:
     runs-on: ubuntu-latest

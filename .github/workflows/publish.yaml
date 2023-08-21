@@ -9,7 +9,7 @@ on:
       - published
 
 env:
-  WRANGLER_VERSION: "1.19.12"
+  WRANGLER_VERSION: "3.5.1"
   NODE_VERSION: "16.14.0"
 
 jobs:
@@ -33,11 +33,11 @@ jobs:
           if [[ "${{ github.event_name }}" == "release" ]]; then
             environment="production"
           fi
-          echo "::set-output name=environment::${environment}"
+          echo "{environment}=${environment}" >> "$GITHUB_OUTPUT"
 
       - name: Publish ${{ steps.environment.outputs.environment }} worker
-        uses: cloudflare/wrangler-action@1.3.0
+        uses: cloudflare/wrangler-action@3.1.0
         with:
           apiToken: ${{ secrets.CF_WORKER_API_TOKEN }}
-          environment: ${{ steps.environment.outputs.environment }}
           wranglerVersion: ${{ env.WRANGLER_VERSION }}
+          command: deploy --env=${{ steps.environment.outputs.environment }}
