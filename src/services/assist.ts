@@ -40,7 +40,10 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
   const speed = searchParams.get("speed");
 
   if (request.method !== "PUT") {
-    return createResponse({ content: { message: "Invalid method" } });
+    return createResponse({
+      content: { message: "Invalid method" },
+      status: 405,
+    });
   }
 
   if (!WAKE_WORD_ALLOWED_CONTENT_TYPES.includes(contentType)) {
@@ -48,6 +51,7 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
       content: {
         message: `Invalid content-type, received: ${contentType}, allowed: ${WAKE_WORD_ALLOWED_CONTENT_TYPES}`,
       },
+      status: 415,
     });
   }
   if (
@@ -58,6 +62,7 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
       content: {
         message: `Invalid content-length, received: ${contentLength}, allowed [${WAKE_WORD_MIN_CONTENT_LENGTH}-${WAKE_WORD_MAX_CONTENT_LENGTH}]`,
       },
+      status: 413,
     });
   } else if (!(distance && speed)) {
     return createResponse({

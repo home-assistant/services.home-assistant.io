@@ -52,7 +52,7 @@ describe("Assist handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
     expect((result as any).message).toContain("Invalid method");
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(405);
   });
 
   it("rejects if not the exact path", async () => {
@@ -71,7 +71,7 @@ describe("Assist handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
     expect((result as any).message).toContain("Invalid content-type");
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(415);
   });
 
   it("rejects when called to small file", async () => {
@@ -85,7 +85,7 @@ describe("Assist handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
     expect((result as any).message).toContain("Invalid content-length");
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(413);
   });
 
   it("rejects when called to big file", async () => {
@@ -99,7 +99,7 @@ describe("Assist handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
     expect((result as any).message).toContain("Invalid content-length");
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(413);
   });
 
   it("rejects when missing speed", async () => {
