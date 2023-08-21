@@ -135,7 +135,7 @@ describe("Assist handler", function () {
     expect(response.status).toBe(400);
   });
 
-  it("rejects when missing wake_word", async () => {
+  it("rejects when unkown wake_word", async () => {
     MockEvent.request.url =
       "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4&distance=400&wake_word=unknown";
     const response = await routeRequest(MockSentry, MockEvent);
