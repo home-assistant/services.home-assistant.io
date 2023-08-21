@@ -7,6 +7,18 @@ const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
 const WAKE_WORD_MIN_CONTENT_LENGTH = 10 * 1024;
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
 
+const createResponse = (options: {
+  content: Record<string, any> | string;
+  status?: number;
+}) =>
+  new Response(JSON.stringify(options.content, null, 2), {
+    status: options.status ?? 400,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+  });
+
 const getUserHash = async (request: Request): Promise<string> => {
   const msgUint8 = new TextEncoder().encode(
     request.headers["CF-Connecting-IP"]
@@ -27,33 +39,30 @@ const handleGetSignedUrl = async (request: Request): Promise<Response> => {
   const distance = searchParams.get("distance");
   const speed = searchParams.get("speed");
 
-  let preCheckErrorMessage = "";
   if (request.method !== "PUT") {
-    preCheckErrorMessage = "Invalid method";
+    return createResponse({ content: { message: "Invalid method" } });
   }
 
   if (!WAKE_WORD_ALLOWED_CONTENT_TYPES.includes(contentType)) {
-    preCheckErrorMessage = `Invalid content-type, received: ${contentType}, allowed: ${WAKE_WORD_ALLOWED_CONTENT_TYPES}`;
-  } else if (
+    return createResponse({
+      content: {
+        message: `Invalid content-type, received: ${contentType}, allowed: ${WAKE_WORD_ALLOWED_CONTENT_TYPES}`,
+      },
+    });
+  }
+  if (
     contentLength < WAKE_WORD_MIN_CONTENT_LENGTH ||
     contentLength > WAKE_WORD_MAX_CONTENT_LENGTH
   ) {
-    preCheckErrorMessage = `Invalid content-length, received: ${contentLength}, allowed [${WAKE_WORD_MIN_CONTENT_LENGTH}-${WAKE_WORD_MAX_CONTENT_LENGTH}]`;
+    return createResponse({
+      content: {
+        message: `Invalid content-length, received: ${contentLength}, allowed [${WAKE_WORD_MIN_CONTENT_LENGTH}-${WAKE_WORD_MAX_CONTENT_LENGTH}]`,
+      },
+    });
   } else if (!(distance && speed)) {
-    preCheckErrorMessage = `Invalid parameters: missing distance or speed`;
-  }
-
-  if (preCheckErrorMessage.length) {
-    return new Response(
-      JSON.stringify({ message: preCheckErrorMessage }, null, 2),
-      {
-        status: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-      }
-    );
+    return createResponse({
+      content: { message: `Invalid parameters: missing distance or speed` },
+    });
   }
 
   const date = new Date().toISOString().substring(0, 23).replace(/:/g, "-");
@@ -62,13 +71,7 @@ const handleGetSignedUrl = async (request: Request): Promise<Response> => {
 
   await WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
-  return new Response(JSON.stringify({ message: "success", key }, null, 2), {
-    status: 201,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json;charset=UTF-8",
-    },
-  });
+  return createResponse({ content: { message: "success", key }, status: 201 });
 };
 
 export async function assistHandler(
@@ -79,14 +82,7 @@ export async function assistHandler(
   switch (requestUrl.pathname) {
     case TRIGGER_PATH.WAKE_WORD_TRAINING_GET_UPLOAD_URL:
       return await handleGetSignedUrl(request);
-      break;
   }
 
-  return new Response("Not found", {
-    status: 404,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "text/html;charset=UTF-8",
-    },
-  });
+  return createResponse({ content: "Not Found", status: 404 });
 }

@@ -132,5 +132,9 @@ describe("Assist handler", function () {
     expect((global as any).WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(
       1
     );
+    expect((global as any).WAKEWORD_TRAINING_BUCKET.put).toBeCalledWith(
+      result.key,
+      expect.anything()
+    );
   });
 });
