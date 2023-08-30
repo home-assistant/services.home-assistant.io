@@ -5,7 +5,7 @@ enum TRIGGER_PATH {
 }
 const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
-const WAKE_WORD_MIN_CONTENT_LENGTH = 10 * 1024;
+const WAKE_WORD_MIN_CONTENT_LENGTH = 400;
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
 
 const createResponse = (options: {
