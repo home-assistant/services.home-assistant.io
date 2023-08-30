@@ -16,6 +16,8 @@ const createResponse = (options: {
     status: options.status ?? 400,
     headers: {
       "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "PUT",
+      "Access-Control-Allow-Headers": "Content-Type",
       "Content-Type": "application/json;charset=UTF-8",
     },
   });
@@ -95,6 +97,10 @@ export async function assistHandler(
   request: Request,
   sentry: Toucan
 ): Promise<Response> {
+  if (request.method === "OPTIONS") {
+    // CORS preflight request
+    return createResponse({ content: "ok", status: 200 });
+  }
   switch (requestUrl.pathname) {
     case TRIGGER_PATH.WAKE_WORD_TRAINING_UPLOAD:
       return await handleUploadAudioFile(request);
