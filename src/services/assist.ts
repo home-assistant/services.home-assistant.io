@@ -5,7 +5,6 @@ enum TRIGGER_PATH {
 }
 const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
-const WAKE_WORD_MIN_CONTENT_LENGTH = 10 * 1024;
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
 
 const createResponse = (options: {
@@ -58,13 +57,10 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
       status: 415,
     });
   }
-  if (
-    contentLength < WAKE_WORD_MIN_CONTENT_LENGTH ||
-    contentLength > WAKE_WORD_MAX_CONTENT_LENGTH
-  ) {
+  if (contentLength > WAKE_WORD_MAX_CONTENT_LENGTH) {
     return createResponse({
       content: {
-        message: `Invalid content-length, received: ${contentLength}, allowed [${WAKE_WORD_MIN_CONTENT_LENGTH}-${WAKE_WORD_MAX_CONTENT_LENGTH}]`,
+        message: `Invalid content-length, received: ${contentLength}, allowed [<${WAKE_WORD_MAX_CONTENT_LENGTH}]`,
       },
       status: 413,
     });

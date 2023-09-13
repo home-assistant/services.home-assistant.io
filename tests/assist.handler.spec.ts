@@ -74,20 +74,6 @@ describe("Assist handler", function () {
     expect(response.status).toBe(415);
   });
 
-  it("rejects when called to small file", async () => {
-    MockEvent.request.headers = new Map(
-      Object.entries({
-        "CF-Connecting-IP": "1.2.3.4",
-        "content-type": "audio/webm",
-        "content-length": 10,
-      })
-    );
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toContain("Invalid content-length");
-    expect(response.status).toBe(413);
-  });
-
   it("rejects when called to big file", async () => {
     MockEvent.request.headers = new Map(
       Object.entries({
