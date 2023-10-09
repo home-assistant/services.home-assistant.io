@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-env:
-  NODE_VERSION: "16.14.0"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,9 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.0
 
+      - name: Set NodeJS version
+        id: node
+        run: echo "version=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-node@v3.8.1
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: ${{ steps.node.outputs.version }}
 
       - name: Set wrangler version
         id: wrangler
