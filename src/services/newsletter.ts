@@ -1,4 +1,4 @@
-import Toucan from "toucan-js";
+import { Toucan } from "toucan-js";
 import { CfRequest, ServiceError } from "../common";
 
 const MAILERLITE_API = "https://api.mailerlite.com/api/v2/subscribers";
