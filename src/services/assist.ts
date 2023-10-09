@@ -1,4 +1,4 @@
-import Toucan from "toucan-js";
+import { Toucan } from "toucan-js";
 import { CfRequest } from "../common";
 
 enum TRIGGER_PATH {

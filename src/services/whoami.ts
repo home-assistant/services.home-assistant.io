@@ -1,4 +1,4 @@
-import Toucan from "toucan-js";
+import { Toucan } from "toucan-js";
 import { CfRequest, ServiceError } from "../common";
 import { countryCurrency } from "../data/currency";
 

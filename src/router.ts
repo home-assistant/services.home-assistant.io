@@ -1,4 +1,4 @@
-import Toucan from "toucan-js";
+import { Toucan } from "toucan-js";
 import { ServiceError } from "./common";
 import { newsletterHandler } from "./services/newsletter";
 import { whoamiHandler } from "./services/whoami";

@@ -1,4 +1,4 @@
-import Toucan from "toucan-js";
+import { Toucan } from "toucan-js";
 
 export interface CfRequest extends Request {
   cf?: IncomingRequestCfProperties;
@@ -15,11 +15,13 @@ export class ServiceError extends Error {
   }
 }
 
-export const sentryClient = (event: FetchEvent | ScheduledEvent) => {
+export const sentryClient = (event: FetchEvent) => {
   const client = new Toucan({
     dsn: SENTRY_DSN,
-    allowedHeaders: ["user-agent"],
-    event,
+    requestDataOptions: {
+      allowedHeaders: ["user-agent"],
+    },
+    request: event.request,
     environment: WORKER_ENV,
   });
   return client;
