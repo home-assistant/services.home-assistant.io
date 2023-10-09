@@ -9,7 +9,6 @@ on:
       - published
 
 env:
-  WRANGLER_VERSION: "3.5.1"
   NODE_VERSION: "16.14.0"
 
 jobs:
@@ -22,6 +21,10 @@ jobs:
       - uses: actions/setup-node@v3.8.1
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Set wrangler version
+        id: wrangler
+        run: echo "version=$(jq -r .devDependencies.wrangler package.json | cut -c2-)" >> "$GITHUB_OUTPUT"
 
       - name: Install packages
         run: yarn install
@@ -39,5 +42,5 @@ jobs:
         uses: cloudflare/wrangler-action@v3.1.0
         with:
           apiToken: ${{ secrets.CF_WORKER_API_TOKEN }}
-          wranglerVersion: ${{ env.WRANGLER_VERSION }}
+          wranglerVersion: ${{ steps.wrangler.outputs.version }}
           command: deploy --env=${{ steps.environment.outputs.environment }}
