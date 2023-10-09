@@ -1,4 +1,5 @@
 import Toucan from "toucan-js";
+import { CfRequest } from "../common";
 
 enum TRIGGER_PATH {
   WAKE_WORD_TRAINING_UPLOAD = "/assist/wake_word/training_data/upload",
@@ -33,7 +34,7 @@ const getUserHash = async (request: Request): Promise<string> => {
   return hashHex;
 };
 
-const handleUploadAudioFile = async (request: Request): Promise<Response> => {
+const handleUploadAudioFile = async (request: CfRequest): Promise<Response> => {
   const contentType = request.headers.get("content-type");
   const contentLength = parseInt(request.headers.get("content-length"), 10);
 
@@ -90,7 +91,7 @@ const handleUploadAudioFile = async (request: Request): Promise<Response> => {
 
 export async function assistHandler(
   requestUrl: URL,
-  request: Request,
+  request: CfRequest,
   sentry: Toucan
 ): Promise<Response> {
   if (request.method === "OPTIONS") {

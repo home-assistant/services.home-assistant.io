@@ -1,5 +1,9 @@
 import Toucan from "toucan-js";
 
+export interface CfRequest extends Request {
+  cf?: IncomingRequestCfProperties;
+}
+
 export class ServiceError extends Error {
   code: number;
   errorType?: string;
