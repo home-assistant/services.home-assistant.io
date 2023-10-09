@@ -1,10 +1,10 @@
 import { Toucan } from "toucan-js";
-import { ServiceError } from "./common";
+import { ServiceError, WorkerEvent } from "./common";
 import { newsletterHandler } from "./services/newsletter";
 import { whoamiHandler } from "./services/whoami";
 import { assistHandler } from "./services/assist";
 
-export async function routeRequest(sentry: Toucan, event: FetchEvent) {
+export async function routeRequest(sentry: Toucan, event: WorkerEvent) {
   let requestUrl = new URL(event.request.url);
 
   if (requestUrl.host.startsWith("whoami")) {
@@ -25,28 +25,13 @@ export async function routeRequest(sentry: Toucan, event: FetchEvent) {
 
   switch (service) {
     case "whoami":
-      return handleRequestWrapper(
-        requestUrl,
-        event.request,
-        sentry,
-        whoamiHandler
-      );
+      return handleRequestWrapper(requestUrl, event, sentry, whoamiHandler);
 
     case "newsletter":
-      return handleRequestWrapper(
-        requestUrl,
-        event.request,
-        sentry,
-        newsletterHandler
-      );
+      return handleRequestWrapper(requestUrl, event, sentry, newsletterHandler);
 
     case "assist":
-      return handleRequestWrapper(
-        requestUrl,
-        event.request,
-        sentry,
-        assistHandler
-      );
+      return handleRequestWrapper(requestUrl, event, sentry, assistHandler);
 
     default:
       return new Response(null, { status: 404 });
@@ -55,16 +40,16 @@ export async function routeRequest(sentry: Toucan, event: FetchEvent) {
 
 export async function handleRequestWrapper(
   requestUrl: URL,
-  request: Request,
+  event: WorkerEvent,
   sentry: Toucan,
   serviceHandler: (
     requestUrl: URL,
-    request: Request,
+    event: WorkerEvent,
     sentry: Toucan
   ) => Promise<Response>
 ): Promise<Response> {
   try {
-    return await serviceHandler(requestUrl, request, sentry);
+    return await serviceHandler(requestUrl, event, sentry);
   } catch (err) {
     if (!(err instanceof ServiceError)) {
       err = new ServiceError(err.message);
@@ -75,7 +60,7 @@ export async function handleRequestWrapper(
     let returnBody: string;
     const headers = { "Access-Control-Allow-Origin": "*" };
 
-    if ((request.headers.get("accept") || "").includes("json")) {
+    if ((event.request.headers.get("accept") || "").includes("json")) {
       returnBody = JSON.stringify({ error: err.errorType });
       headers["content-type"] = "application/json;charset=UTF-8";
     } else {

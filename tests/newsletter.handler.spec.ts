@@ -1,10 +1,11 @@
 import { MockedSentry, MockResponse } from "./mock";
 import { routeRequest } from "../src/router";
 import { SUCCESS_MESSAGE } from "../src/services/newsletter";
+import { WorkerEvent } from "../src/common";
 
 describe("Handler", function () {
   let MockRequest: any;
-  let MockEvent: any;
+  let MockEvent: WorkerEvent;
   let MockSentry: any;
   let MockRequestUrl: URL;
 
@@ -12,7 +13,6 @@ describe("Handler", function () {
     MockSentry = MockedSentry();
     (global as any).Response = MockResponse;
     (global as any).fetch = async () => new MockResponse("");
-    (global as any).MAILERLITE_API_KEY = "abc123";
 
     MockRequestUrl = new URL(
       "https://services.home-assistant.io/newsletter/signup"
@@ -31,7 +31,16 @@ describe("Handler", function () {
         get: () => "test@test.test",
       }),
     };
-    MockEvent = { request: MockRequest };
+    MockEvent = {
+      request: MockRequest,
+      env: {
+        SENTRY_DSN: "",
+        WORKER_ENV: "test",
+        MAILERLITE_API_KEY: "abc123",
+        WAKEWORD_TRAINING_BUCKET: {} as unknown as R2Bucket,
+      },
+      ctx: {} as unknown as ExecutionContext,
+    };
   });
 
   it("Regular base request", async () => {
@@ -42,6 +51,7 @@ describe("Handler", function () {
   });
 
   it("Bad method", async () => {
+    // @ts-expect-error overriding read-only property
     MockEvent.request.method = "GET";
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
@@ -50,6 +60,7 @@ describe("Handler", function () {
   });
 
   it("Bad path", async () => {
+    // @ts-expect-error overriding read-only property
     MockEvent.request.url = "https://services.home-assistant.io/newsletter/bad";
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
@@ -58,6 +69,7 @@ describe("Handler", function () {
   });
 
   it("Bad content", async () => {
+    // @ts-expect-error overriding read-only property
     MockEvent.request.headers = new Map(
       Object.entries({
         "CF-Connecting-IP": "1.2.3.4",
@@ -71,9 +83,10 @@ describe("Handler", function () {
   });
 
   it("No email", async () => {
-    MockEvent.request.formData = async () => ({
-      has: () => false,
-    });
+    MockEvent.request.formData = async () =>
+      ({
+        has: () => false,
+      } as unknown as FormData);
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
     expect(result).toBe("Error: missing_email");
