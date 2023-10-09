@@ -32,7 +32,7 @@ jobs:
         run: yarn install
 
       - name: Build ${{ matrix.environment }} worker
-        uses: cloudflare/wrangler-action@v3.1.0
+        uses: cloudflare/wrangler-action@v3.2.0
         with:
           wranglerVersion: ${{ steps.wrangler.outputs.version }}
           command: deploy --dry-run --env=${{ matrix.environment }}
