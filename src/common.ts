@@ -1,7 +1,20 @@
 import { Toucan } from "toucan-js";
 
+export interface WorkerEnv {
+  SENTRY_DSN: string;
+  WORKER_ENV: string;
+  MAILERLITE_API_KEY: string;
+  WAKEWORD_TRAINING_BUCKET: R2Bucket;
+}
+
 export interface CfRequest extends Request {
   cf?: IncomingRequestCfProperties;
+}
+
+export interface WorkerEvent {
+  request: CfRequest;
+  env: WorkerEnv;
+  ctx: ExecutionContext;
 }
 
 export class ServiceError extends Error {
@@ -15,14 +28,14 @@ export class ServiceError extends Error {
   }
 }
 
-export const sentryClient = (event: FetchEvent) => {
+export const sentryClient = (event: WorkerEvent) => {
   const client = new Toucan({
-    dsn: SENTRY_DSN,
+    dsn: event.env.SENTRY_DSN,
     requestDataOptions: {
       allowedHeaders: ["user-agent"],
     },
     request: event.request,
-    environment: WORKER_ENV,
+    environment: event.env.WORKER_ENV,
   });
   return client;
 };

@@ -1,5 +1,5 @@
 import { Toucan } from "toucan-js";
-import { CfRequest } from "../common";
+import { WorkerEvent } from "../common";
 
 enum TRIGGER_PATH {
   WAKE_WORD_TRAINING_UPLOAD = "/assist/wake_word/training_data/upload",
@@ -22,7 +22,9 @@ const createResponse = (options: {
     },
   });
 
-const getUserHash = async (request: Request): Promise<string> => {
+const getUserHash = async (
+  request: WorkerEvent["request"]
+): Promise<string> => {
   const msgUint8 = new TextEncoder().encode(
     request.headers["CF-Connecting-IP"]
   );
@@ -34,7 +36,8 @@ const getUserHash = async (request: Request): Promise<string> => {
   return hashHex;
 };
 
-const handleUploadAudioFile = async (request: CfRequest): Promise<Response> => {
+const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
+  const { request } = event;
   const contentType = request.headers.get("content-type");
   const contentLength = parseInt(request.headers.get("content-length"), 10);
 
@@ -84,23 +87,23 @@ const handleUploadAudioFile = async (request: CfRequest): Promise<Response> => {
   const userHash = await getUserHash(request);
   const key = `${wakeWord}-${date}-${distance}-${speed}-${userHash}.webm`;
 
-  await WAKEWORD_TRAINING_BUCKET.put(key, request.body);
+  await event.env.WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
   return createResponse({ content: { message: "success", key }, status: 201 });
 };
 
 export async function assistHandler(
   requestUrl: URL,
-  request: CfRequest,
+  event: WorkerEvent,
   sentry: Toucan
 ): Promise<Response> {
-  if (request.method === "OPTIONS") {
+  if (event.request.method === "OPTIONS") {
     // CORS preflight request
     return createResponse({ content: "ok", status: 200 });
   }
   switch (requestUrl.pathname) {
     case TRIGGER_PATH.WAKE_WORD_TRAINING_UPLOAD:
-      return await handleUploadAudioFile(request);
+      return await handleUploadAudioFile(event);
   }
 
   return createResponse({ content: "Not Found", status: 404 });

@@ -1,5 +1,5 @@
 import { Toucan } from "toucan-js";
-import { CfRequest, ServiceError } from "../common";
+import { ServiceError, WorkerEvent } from "../common";
 
 const MAILERLITE_API = "https://api.mailerlite.com/api/v2/subscribers";
 
@@ -12,9 +12,10 @@ export enum NewsletterErrorType {
 
 export async function newsletterHandler(
   requestUrl: URL,
-  request: CfRequest,
+  event: WorkerEvent,
   sentry: Toucan
 ): Promise<Response> {
+  const { request } = event;
   if (
     request.method !== "POST" ||
     requestUrl.pathname !== "/newsletter/signup" ||
@@ -50,7 +51,7 @@ export async function newsletterHandler(
       body: JSON.stringify({ email }),
       headers: {
         "Content-Type": "application/json",
-        "X-MailerLite-ApiKey": MAILERLITE_API_KEY,
+        "X-MailerLite-ApiKey": event.env.MAILERLITE_API_KEY,
       },
     });
   } catch (err: any) {
