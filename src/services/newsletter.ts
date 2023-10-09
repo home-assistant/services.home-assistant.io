@@ -1,5 +1,5 @@
 import Toucan from "toucan-js";
-import { ServiceError } from "../common";
+import { CfRequest, ServiceError } from "../common";
 
 const MAILERLITE_API = "https://api.mailerlite.com/api/v2/subscribers";
 
@@ -12,7 +12,7 @@ export enum NewsletterErrorType {
 
 export async function newsletterHandler(
   requestUrl: URL,
-  request: Request,
+  request: CfRequest,
   sentry: Toucan
 ): Promise<Response> {
   if (

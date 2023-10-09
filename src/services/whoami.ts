@@ -1,5 +1,5 @@
 import Toucan from "toucan-js";
-import { ServiceError } from "../common";
+import { CfRequest, ServiceError } from "../common";
 import { countryCurrency } from "../data/currency";
 
 const REQUIRED_KEYS = ["country", "timezone"];
@@ -16,7 +16,7 @@ export enum WhoamiErrorType {
 
 export async function whoamiHandler(
   requestUrl: URL,
-  request: Request,
+  request: CfRequest,
   sentry: Toucan
 ): Promise<Response> {
   if (request.method !== "GET") {
@@ -29,6 +29,10 @@ export async function whoamiHandler(
       "https://github.com/home-assistant/services.home-assistant.io",
       301
     );
+  }
+
+  if (!request.cf) {
+    return new Response(null, { status: 400 });
   }
 
   const date = new Date();
