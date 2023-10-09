@@ -1,6 +1,6 @@
 {
     "name": "services.home-assistant.io",
-    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:16",
+    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:20",
     "context": "..",
     "remoteEnv": {
       "PATH":"${containerEnv:PATH}:./node_modules/.bin",
