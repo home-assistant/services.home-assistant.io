@@ -15,13 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.0
 
-      - name: Set NodeJS version
-        id: node
-        run: echo "version=$(cat .nvmrc)" >> "$GITHUB_OUTPUT"
-
       - uses: actions/setup-node@v3.8.1
         with:
-          node-version: ${{ steps.node.outputs.version }}
+          node-version-file: '.nvmrc'
 
       - name: Set wrangler version
         id: wrangler
