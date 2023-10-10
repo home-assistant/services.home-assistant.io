@@ -32,7 +32,7 @@ export const sentryClient = (event: WorkerEvent) => {
   const client = new Toucan({
     dsn: event.env.SENTRY_DSN,
     requestDataOptions: {
-      allowedHeaders: ["user-agent"],
+      allowedHeaders: ["user-agent", "cf-ray"],
     },
     context: event.ctx,
     request: event.request,
