@@ -1,4 +1,4 @@
-import { MockedSentry, MockResponse } from "./mock";
+import { MockedConsole, MockedSentry, MockResponse } from "./mock";
 import { routeRequest } from "../src/router";
 import { SUCCESS_MESSAGE } from "../src/services/newsletter";
 import { WorkerEvent } from "../src/common";
@@ -13,6 +13,7 @@ describe("Handler", function () {
     MockSentry = MockedSentry();
     (global as any).Response = MockResponse;
     (global as any).fetch = async () => new MockResponse("");
+    (global as any).console = MockedConsole();
 
     MockRequestUrl = new URL(
       "https://services.home-assistant.io/newsletter/signup"

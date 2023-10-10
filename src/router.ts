@@ -16,7 +16,7 @@ export async function routeRequest(sentry: Toucan, event: WorkerEvent) {
 
   const service = requestUrl.pathname.split("/")[1];
   sentry.setTag("service", service);
-  sentry.setExtra("requestId", event.request.headers.get("cf-request-id"));
+  sentry.setExtra("rayId", event.request.headers.get("cf-ray-id"));
   sentry.setExtra("requestUrl", {
     protocol: requestUrl.protocol,
     pathname: requestUrl.pathname,
@@ -55,7 +55,7 @@ export async function handleRequestWrapper(
       err = new ServiceError(err.message);
     }
     sentry.addBreadcrumb({ message: err.message });
-    sentry.captureException(err);
+    const captureId = sentry.captureException(err);
 
     let returnBody: string;
     const headers = { "Access-Control-Allow-Origin": "*" };
@@ -66,6 +66,8 @@ export async function handleRequestWrapper(
     } else {
       returnBody = `Error: ${err.errorType}`;
     }
+
+    console.error(`[${err.code}] ${returnBody} (${captureId})`);
 
     return new Response(returnBody, {
       status: err.code,

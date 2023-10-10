@@ -1,4 +1,4 @@
-import { MockedSentry, MockResponse } from "./mock";
+import { MockedConsole, MockedSentry, MockResponse } from "./mock";
 import { routeRequest } from "../src/router";
 import { webcrypto } from "crypto";
 import { WorkerEvent } from "../src/common";
@@ -19,6 +19,7 @@ describe("Assist handler", function () {
     MockSentry = MockedSentry();
     (global as any).Response = MockResponse;
     (global as any).fetch = async () => new MockResponse("");
+    (global as any).console = MockedConsole();
 
     MockRequestUrl = new URL(
       "https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=400&speed=3&wake_word=ok_nabu"
