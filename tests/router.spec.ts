@@ -1,4 +1,4 @@
-import { MockedSentry, MockResponse } from "./mock";
+import { MockedConsole, MockedSentry, MockResponse } from "./mock";
 import { routeRequest } from "../src/router";
 
 describe("Handler", function () {
@@ -8,8 +8,9 @@ describe("Handler", function () {
   let MockRequestUrl: URL;
 
   beforeEach(() => {
-    MockSentry = MockedSentry();
+    (global as any).console = MockedConsole();
     (global as any).Response = MockResponse;
+    MockSentry = MockedSentry();
     const headers: Map<string, string> = new Map(
       Object.entries({ "CF-Connecting-IP": "1.2.3.4" })
     );

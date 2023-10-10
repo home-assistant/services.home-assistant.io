@@ -8,6 +8,12 @@ export const MockedSentry = () => ({
   captureMessage: jest.fn(),
 });
 
+export const MockedConsole = () => ({
+  log: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+});
+
 export class MockResponse {
   body: string;
   status: number = 200;

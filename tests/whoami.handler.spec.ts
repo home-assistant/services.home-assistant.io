@@ -1,4 +1,4 @@
-import { MockedSentry, MockResponse } from "./mock";
+import { MockedConsole, MockedSentry, MockResponse } from "./mock";
 import { WhoamiErrorType } from "../src/services/whoami";
 import { routeRequest } from "../src/router";
 import { ServiceError } from "../src/common";
@@ -12,6 +12,7 @@ describe("Handler", function () {
   beforeEach(() => {
     MockSentry = MockedSentry();
     (global as any).Response = MockResponse;
+    (global as any).console = MockedConsole();
     const headers: Map<string, string> = new Map(
       Object.entries({ "CF-Connecting-IP": "1.2.3.4" })
     );

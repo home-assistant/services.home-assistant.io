@@ -34,6 +34,7 @@ export const sentryClient = (event: WorkerEvent) => {
     requestDataOptions: {
       allowedHeaders: ["user-agent"],
     },
+    context: event.ctx,
     request: event.request,
     environment: event.env.WORKER_ENV,
   });
