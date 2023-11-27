@@ -23,6 +23,6 @@
     ]
   },
   "dependencies": {
-    "toucan-js": "^3.3.0"
+    "toucan-js": "^3.3.1"
   }
 }
