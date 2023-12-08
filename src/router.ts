@@ -1,6 +1,5 @@
 import { Toucan } from "toucan-js";
 import { ServiceError, WorkerEvent } from "./common";
-import { newsletterHandler } from "./services/newsletter";
 import { whoamiHandler } from "./services/whoami";
 import { assistHandler } from "./services/assist";
 
@@ -25,9 +24,6 @@ export async function routeRequest(sentry: Toucan, event: WorkerEvent) {
   switch (service) {
     case "whoami":
       return handleRequestWrapper(requestUrl, event, sentry, whoamiHandler);
-
-    case "newsletter":
-      return handleRequestWrapper(requestUrl, event, sentry, newsletterHandler);
 
     case "assist":
       return handleRequestWrapper(requestUrl, event, sentry, assistHandler);
