@@ -14,11 +14,12 @@ describe("Handler", function () {
     const headers: Map<string, string> = new Map(
       Object.entries({ "CF-Connecting-IP": "1.2.3.4" })
     );
-    MockRequestUrl = new URL("https://services.home-assistant.io/newsletter");
+    MockRequestUrl = new URL("http://services.home-assistant.io/whoami/v1/ip");
     MockRequest = {
       url: MockRequestUrl.href,
       method: "GET",
       headers,
+      cf: {},
     };
     MockEvent = { request: MockRequest };
   });
@@ -33,7 +34,7 @@ describe("Handler", function () {
     );
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json<Record<string, any>>();
-    expect(result.error).toBe("not_valid");
+    expect(result.error).toBe("not_allowed");
   });
 
   it("Return error as text (with accept header)", async () => {
@@ -46,7 +47,7 @@ describe("Handler", function () {
     );
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("Error: not_valid");
+    expect(result).toBe("Error: not_allowed");
   });
 
   it("Return error as text (without accept header)", async () => {
@@ -58,6 +59,6 @@ describe("Handler", function () {
     );
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.text();
-    expect(result).toBe("Error: not_valid");
+    expect(result).toBe("Error: not_allowed");
   });
 });
