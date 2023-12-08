@@ -3,11 +3,17 @@ import { routeRequest } from "../src/router";
 import { SUCCESS_MESSAGE } from "../src/services/newsletter";
 import { WorkerEvent } from "../src/common";
 
+const originalFetch = global.fetch;
+
 describe("Handler", function () {
   let MockRequest: any;
   let MockEvent: WorkerEvent;
   let MockSentry: any;
   let MockRequestUrl: URL;
+
+  afterEach(() => {
+    (global as any).fetch = originalFetch;
+  });
 
   beforeEach(() => {
     MockSentry = MockedSentry();
