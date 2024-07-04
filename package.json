@@ -3,6 +3,7 @@
     "@cloudflare/workers-types": "^4.20240620.0",
     "@types/jest": "^27.5.0",
     "@types/node": "^20.14.9",
+    "@types/uuid": "^10.0.0",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
     "ts-loader": "^9.5.1",
@@ -23,6 +24,7 @@
     ]
   },
   "dependencies": {
-    "toucan-js": "^3.4.0"
+    "toucan-js": "^3.4.0",
+    "uuid": "^10.0.0"
   }
 }

@@ -1,4 +1,5 @@
 import { Toucan } from "toucan-js";
+import { v4 as uuidv4 } from "uuid";
 import { WorkerEvent } from "../common";
 
 enum TRIGGER_PATH {
@@ -7,6 +8,7 @@ enum TRIGGER_PATH {
 const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
+const USER_CONTENT_MAX_CONTENT_LENGTH = 150;
 
 const createResponse = (options: {
   content: Record<string, any> | string;
@@ -22,18 +24,8 @@ const createResponse = (options: {
     },
   });
 
-const getUserHash = async (
-  request: WorkerEvent["request"]
-): Promise<string> => {
-  const msgUint8 = new TextEncoder().encode(
-    request.headers["CF-Connecting-IP"]
-  );
-  const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
+const getUUID = (): string => {
+  return uuidv4();
 };
 
 const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
@@ -45,6 +37,10 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
   const distance = searchParams.get("distance");
   const speed = searchParams.get("speed");
   const wakeWord = searchParams.get("wake_word");
+  const userContent = searchParams.get("user_content");
+  const sanitizedUserContent = userContent
+    ? userContent.replace(/[^a-zA-Z0-9]/g, "")
+    : "";
 
   if (request.method !== "PUT") {
     return createResponse({
@@ -69,7 +65,8 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
       status: 413,
     });
   }
-  if (!(distance && speed && wakeWord)) {
+  // add error check for sanitizedUserContent, not implemented so we don't break feature on frontend during implementation, update message when implemeneted
+  if (!((distance && speed && wakeWord) /*&& sanitizedUserContent */)) {
     return createResponse({
       content: {
         message: `Invalid parameters: missing distance, speed or wake_word`,
@@ -83,9 +80,16 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
     });
   }
 
-  const date = new Date().toISOString().substring(0, 23).replace(/:/g, "-");
-  const userHash = await getUserHash(request);
-  const key = `${wakeWord}-${date}-${distance}-${speed}-${userHash}.webm`;
+  if (sanitizedUserContent.length > USER_CONTENT_MAX_CONTENT_LENGTH) {
+    return createResponse({
+      content: {
+        message: `Invalid user content length, received: ${sanitizedUserContent.length}, allowed [<${USER_CONTENT_MAX_CONTENT_LENGTH}]`,
+      },
+    });
+  }
+
+  const uuid = getUUID();
+  const key = `${wakeWord}-${distance}-${speed}-${sanitizedUserContent}-${uuid}.webm`;
 
   await event.env.WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
