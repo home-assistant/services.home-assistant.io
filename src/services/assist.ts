@@ -30,8 +30,6 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
   const cfRay = request.headers.get("cf-ray");
 
   const { searchParams } = new URL(request.url);
-  const distance = searchParams.get("distance");
-  const speed = searchParams.get("speed");
   const wakeWord = searchParams.get("wake_word");
   const userContent = searchParams.get("user_content");
   const sanitizedUserContent = userContent
@@ -61,10 +59,10 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
       status: 413,
     });
   }
-  if (!(distance && speed && wakeWord && sanitizedUserContent)) {
+  if (!(wakeWord && sanitizedUserContent)) {
     return createResponse({
       content: {
-        message: `Invalid parameters: missing distance, speed, user_content or wake_word`,
+        message: `Invalid parameters: missing user_content or wake_word`,
       },
     });
   }
@@ -83,7 +81,7 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
     });
   }
 
-  const key = `${wakeWord}-${distance}-${speed}-${sanitizedUserContent}-${cfRay}.webm`;
+  const key = `${wakeWord}-${sanitizedUserContent}-${cfRay}.webm`;
 
   await event.env.WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
