@@ -42,7 +42,7 @@ const getUserHash = async (
 
 const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
   const { request } = event;
-  const contentType = request.headers.get("content-type");
+  const contentType = request.headers.get("content-type").split(";")[0];
   const contentLength = parseInt(request.headers.get("content-length"), 10);
 
   const { searchParams } = new URL(request.url);
