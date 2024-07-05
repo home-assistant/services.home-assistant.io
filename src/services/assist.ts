@@ -4,7 +4,11 @@ import { WorkerEvent } from "../common";
 enum TRIGGER_PATH {
   WAKE_WORD_TRAINING_UPLOAD = "/assist/wake_word/training_data/upload",
 }
-const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
+const WAKE_WORD_ALLOWED_CONTENT_TYPES = [
+  "audio/webm",
+  "audio/ogg",
+  "audio/mp4",
+];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
 const USER_CONTENT_MAX_CONTENT_LENGTH = 150;
@@ -25,7 +29,7 @@ const createResponse = (options: {
 
 const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
   const { request } = event;
-  const contentType = request.headers.get("content-type");
+  const contentType = request.headers.get("content-type").split(";")[0];
   const contentLength = parseInt(request.headers.get("content-length"), 10);
   const cfRay = request.headers.get("cf-ray");
 
@@ -80,8 +84,9 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
       },
     });
   }
-
-  const key = `${wakeWord}-${sanitizedUserContent}-${cfRay}.webm`;
+  
+  const keyExtension = contentType.replace("audio/", "");
+  const key = `${wakeWord}-${sanitizedUserContent}-${cfRay}.${keyExtension}`;
 
   await event.env.WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 

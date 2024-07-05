@@ -6,7 +6,12 @@ import { WorkerEvent } from "../src/common";
 const USER_CONTENT_TO_MANY_CHARACTERS =
   "rrdgY445SJ6TlXFDFUpWJFy29hudyZQsL8cYRYzlAutBJdoweJRPVphWMr6qprory8sYfe6WXSDn5hv293CAP8ybzBM22Ju3LIKKBwrWookqptAZmpydYokTovItHHIWHq7vnmzLYBB1jTDioFcFUeR";
 const USER_CONTENT_VALID = "hello world";
-const FILES_VALID = [{ contentType: "audio/webm", fileExtension: ".webm" }];
+const FILES_VALID = [
+  { contentType: "audio/webm", fileExtension: ".webm" },
+  { contentType: "audio/ogg", fileExtension: ".ogg" },
+  { contentType: "audio/mp4", fileExtension: ".mp4" },
+  { contentType: "audio/ogg;codec=opus", fileExtension: ".ogg" }
+];
 
 describe("Assist handler", function () {
   let MockRequest: any;
