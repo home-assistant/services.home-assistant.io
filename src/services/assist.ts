@@ -89,7 +89,9 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
 
   const date = new Date().toISOString().substring(0, 23).replace(/:/g, "-");
   const userHash = await getUserHash(request);
-  const key = `${wakeWord}-${date}-${distance}-${speed}-${userHash}.webm`;
+  const keyExtension = contentType.replace("audio/", "");
+
+  const key = `${wakeWord}-${date}-${distance}-${speed}-${userHash}.${keyExtension}`;
 
   await event.env.WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
