@@ -25,7 +25,7 @@ describe("Assist handler", function () {
     (global as any).console = MockedConsole();
 
     MockRequestUrl = new URL(
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu"
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu&user_content=user-content"
     );
     MockRequest = {
       url: MockRequestUrl.href,
