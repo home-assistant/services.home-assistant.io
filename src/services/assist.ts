@@ -61,10 +61,10 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
       status: 413,
     });
   }
-  if (!((distance && speed && wakeWord) /*&& sanitizedUserContent */)) {
+  if (!(distance && speed && wakeWord && sanitizedUserContent)) {
     return createResponse({
       content: {
-        message: `Invalid parameters: missing distance, speed or wake_word`,
+        message: `Invalid parameters: missing distance, speed, user_content or wake_word`,
       },
     });
   }

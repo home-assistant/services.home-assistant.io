@@ -4,7 +4,7 @@ import { webcrypto } from "crypto";
 import { WorkerEvent } from "../src/common";
 
 const USER_CONTENT_TO_MANY_CHARACTERS =
-  "rrdgY445SJ6TlXFDFUpWJFy29hudyZQsL8cYRYzlAutBJdoweJRPVphWMr6qprory8sYfe6WXSDn5hv293CAP8ybzBM22Ju3LIKKBwrWookqptAZmpydYokTovItHHIWHq7vnmzLYBB1jTDioFcFUeR"; // 151 characters
+  "rrdgY445SJ6TlXFDFUpWJFy29hudyZQsL8cYRYzlAutBJdoweJRPVphWMr6qprory8sYfe6WXSDn5hv293CAP8ybzBM22Ju3LIKKBwrWookqptAZmpydYokTovItHHIWHq7vnmzLYBB1jTDioFcFUeR";
 
 describe("Assist handler", function () {
   let MockRequest: any;
@@ -137,26 +137,26 @@ describe("Assist handler", function () {
     expect(response.status).toBe(400);
   });
 
-  // it("rejects when missing user_content", async () => {
-  //   // @ts-expect-error overriding read-only property
-  //   MockEvent.request.url =
-  //     "https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu";
-  //   const response = await routeRequest(MockSentry, MockEvent);
-  //   const result = await response.json();
-  //   expect((result as any).message).toStrictEqual(
-  //     "Invalid parameters: missing user_content or wake_word"
-  //   );
-  //   expect(response.status).toBe(400);
-  // });
+  it("rejects when missing user_content", async () => {
+    // @ts-expect-error overriding read-only property
+    MockEvent.request.url =
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu";
+    const response = await routeRequest(MockSentry, MockEvent);
+    const result = await response.json();
+    expect((result as any).message).toStrictEqual(
+      "Invalid parameters: missing distance, speed, user_content or wake_word"
+    );
+    expect(response.status).toBe(400);
+  });
 
-  // it("rejects when user_content length is above maximum", async () => {
-  //   // @ts-expect-error overriding read-only property
-  //   MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu&user_content=${USER_CONTENT_TO_MANY_CHARACTERS}`;
-  //   const response = await routeRequest(MockSentry, MockEvent);
-  //   const result = await response.json();
-  //   expect((result as any).message).toContain("Invalid user content length");
-  //   expect(response.status).toBe(400);
-  // });
+  it("rejects when user_content length is above maximum", async () => {
+    // @ts-expect-error overriding read-only property
+    MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu&user_content=${USER_CONTENT_TO_MANY_CHARACTERS}`;
+    const response = await routeRequest(MockSentry, MockEvent);
+    const result = await response.json();
+    expect((result as any).message).toContain("Invalid user content length");
+    expect(response.status).toBe(400);
+  });
 
   it("rejects when unkown wake_word", async () => {
     // @ts-expect-error overriding read-only property
