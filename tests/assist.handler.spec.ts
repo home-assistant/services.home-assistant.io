@@ -3,6 +3,16 @@ import { routeRequest } from "../src/router";
 import { webcrypto } from "crypto";
 import { WorkerEvent } from "../src/common";
 
+const USER_CONTENT_TO_MANY_CHARACTERS =
+  "rrdgY445SJ6TlXFDFUpWJFy29hudyZQsL8cYRYzlAutBJdoweJRPVphWMr6qprory8sYfe6WXSDn5hv293CAP8ybzBM22Ju3LIKKBwrWookqptAZmpydYokTovItHHIWHq7vnmzLYBB1jTDioFcFUeR";
+const USER_CONTENT_VALID = "hello world";
+const FILES_VALID = [
+  { contentType: "audio/webm", fileExtension: ".webm" },
+  { contentType: "audio/ogg", fileExtension: ".ogg" },
+  { contentType: "audio/mp4", fileExtension: ".mp4" },
+  { contentType: "audio/ogg;codec=opus", fileExtension: ".ogg" }
+];
+
 describe("Assist handler", function () {
   let MockRequest: any;
   let MockEvent: WorkerEvent;
@@ -22,7 +32,7 @@ describe("Assist handler", function () {
     (global as any).console = MockedConsole();
 
     MockRequestUrl = new URL(
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=400&speed=3&wake_word=ok_nabu"
+      `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu&user_content=${USER_CONTENT_VALID}`
     );
     MockRequest = {
       url: MockRequestUrl.href,
@@ -53,158 +63,127 @@ describe("Assist handler", function () {
     };
   });
 
-  it("rejects if not the right HTTP method", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.method = "GET";
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toContain("Invalid method");
-    expect(response.status).toBe(405);
+  describe("success calls", () => {
+    FILES_VALID.forEach(({ contentType, fileExtension }) => {
+      it(`uploads a ${contentType} file on R2`, async () => {
+        // @ts-expect-error overriding read-only property
+        MockEvent.request.headers = new Map(
+          Object.entries({
+            "CF-Connecting-IP": "1.2.3.4",
+            "content-type": contentType,
+          })
+        );
+
+        const response = await routeRequest(MockSentry, MockEvent);
+        const result: Record<string, string> = await response.json();
+
+        expect(response.status).toBe(201);
+        expect(result.message).toStrictEqual("success");
+        expect(result.key.endsWith(fileExtension)).toBeTruthy();
+        expect(
+          MockEvent.env.WAKEWORD_TRAINING_BUCKET.put
+        ).toHaveBeenCalledTimes(1);
+        expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toBeCalledWith(
+          result.key,
+          expect.anything()
+        );
+      });
+    });
   });
 
-  it("rejects if not the exact path", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.url = "https://services.home-assistant.io/assist/unknown";
-    const response = await routeRequest(MockSentry, MockEvent);
-    expect(response.status).toBe(404);
+  describe("bad request", () => {
+    it("rejects if not the right HTTP method", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.method = "GET";
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result = await response.json();
+      expect((result as any).message).toContain("Invalid method");
+      expect(response.status).toBe(405);
+    });
+
+    it("rejects if not the exact path", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.url =
+        "https://services.home-assistant.io/assist/unknown";
+      const response = await routeRequest(MockSentry, MockEvent);
+      expect(response.status).toBe(404);
+    });
   });
 
-  it("rejects when called with bad content-type", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.headers = new Map(
-      Object.entries({
-        "CF-Connecting-IP": "1.2.3.4",
-        "content-type": "json",
-      })
-    );
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toContain("Invalid content-type");
-    expect(response.status).toBe(415);
+  describe("given file", () => {
+    it("rejects when called with bad content-type", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.headers = new Map(
+        Object.entries({
+          "CF-Connecting-IP": "1.2.3.4",
+          "content-type": "json",
+        })
+      );
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result = await response.json();
+      expect((result as any).message).toContain("Invalid content-type");
+      expect(response.status).toBe(415);
+    });
+
+    it("rejects when called to big file", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.headers = new Map(
+        Object.entries({
+          "CF-Connecting-IP": "1.2.3.4",
+          "content-type": "audio/webm",
+          "content-length": 1000000000,
+        })
+      );
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result = await response.json();
+      expect((result as any).message).toContain("Invalid content-length");
+      expect(response.status).toBe(413);
+    });
   });
 
-  it("succeed on valid audio/ogg content-type", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.headers = new Map(
-      Object.entries({
-        "CF-Connecting-IP": "1.2.3.4",
-        "content-type": "audio/ogg",
-      })
-    );
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result: Record<string, string> = await response.json();
-    expect(response.status).toBe(201);
-    expect(result.message).toStrictEqual("success");
-    expect(result.key.endsWith(".ogg")).toBeTruthy();
-    expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(1);
+  describe("wake word parameter", () => {
+    it("rejects when missing wake_word", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?user_content=${USER_CONTENT_VALID}`;
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result = await response.json();
+      expect((result as any).message).toStrictEqual(
+        "Invalid parameters: missing user_content or wake_word"
+      );
+      expect(response.status).toBe(400);
+    });
   });
 
-  it("succeed on valid audio/ogg;codec=opus content-type", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.headers = new Map(
-      Object.entries({
-        "CF-Connecting-IP": "1.2.3.4",
-        "content-type": "audio/ogg;codec=opus",
-      })
-    );
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result: Record<string, string> = await response.json();
-    expect(response.status).toBe(201);
-    expect(result.message).toStrictEqual("success");
-    expect(result.key.endsWith(".ogg")).toBeTruthy();
-    expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(1);
-  });
+  describe("user content", () => {
+    it("rejects when missing user_content", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu`;
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result = await response.json();
+      expect((result as any).message).toStrictEqual(
+        "Invalid parameters: missing user_content or wake_word"
+      );
+      expect(response.status).toBe(400);
+    });
 
-  it("succeed on valid audio/mp4 content-type", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.headers = new Map(
-      Object.entries({
-        "CF-Connecting-IP": "1.2.3.4",
-        "content-type": "audio/mp4",
-      })
-    );
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result: Record<string, string> = await response.json();
-    expect(response.status).toBe(201);
-    expect(result.message).toStrictEqual("success");
-    expect(result.key.endsWith(".mp4")).toBeTruthy();
-    expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(1);
-  });
+    it("rejects when user_content length is above maximum", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu&user_content=${USER_CONTENT_TO_MANY_CHARACTERS}`;
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result = await response.json();
+      expect((result as any).message).toContain("Invalid user content length");
+      expect(response.status).toBe(400);
+    });
 
-  it("rejects when called to big file", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.headers = new Map(
-      Object.entries({
-        "CF-Connecting-IP": "1.2.3.4",
-        "content-type": "audio/webm",
-        "content-length": 1000000000,
-      })
-    );
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toContain("Invalid content-length");
-    expect(response.status).toBe(413);
-  });
-
-  it("rejects when missing speed", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.url =
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?distance=400&wake_word=ok_nabu";
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toStrictEqual(
-      "Invalid parameters: missing distance, speed or wake_word"
-    );
-    expect(response.status).toBe(400);
-  });
-
-  it("rejects when missing distance", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.url =
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4&wake_word=ok_nabu";
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toStrictEqual(
-      "Invalid parameters: missing distance, speed or wake_word"
-    );
-    expect(response.status).toBe(400);
-  });
-
-  it("rejects when missing wake_word", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.url =
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4&distance=400";
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toStrictEqual(
-      "Invalid parameters: missing distance, speed or wake_word"
-    );
-    expect(response.status).toBe(400);
-  });
-
-  it("rejects when unkown wake_word", async () => {
-    // @ts-expect-error overriding read-only property
-    MockEvent.request.url =
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?speed=4&distance=400&wake_word=unknown";
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result = await response.json();
-    expect((result as any).message).toStrictEqual(
-      "Invalid wake word, received: unknown"
-    );
-    expect(response.status).toBe(400);
-  });
-
-  it("uploads the file on R2", async () => {
-    const response = await routeRequest(MockSentry, MockEvent);
-    const result: Record<string, string> = await response.json();
-
-    expect(response.status).toBe(201);
-    expect(result.message).toStrictEqual("success");
-    expect(result.key.endsWith(".webm")).toBeTruthy();
-    expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(1);
-    expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toBeCalledWith(
-      result.key,
-      expect.anything()
-    );
+    it("rejects when unkown wake_word", async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=unknown&user_content=${USER_CONTENT_VALID}`;
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result = await response.json();
+      expect((result as any).message).toStrictEqual(
+        "Invalid wake word, received: unknown"
+      );
+      expect(response.status).toBe(400);
+    });
   });
 });

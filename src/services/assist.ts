@@ -11,6 +11,7 @@ const WAKE_WORD_ALLOWED_CONTENT_TYPES = [
 ];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
+const USER_CONTENT_MAX_CONTENT_LENGTH = 150;
 
 const createResponse = (options: {
   content: Record<string, any> | string;
@@ -26,29 +27,18 @@ const createResponse = (options: {
     },
   });
 
-const getUserHash = async (
-  request: WorkerEvent["request"]
-): Promise<string> => {
-  const msgUint8 = new TextEncoder().encode(
-    request.headers["CF-Connecting-IP"]
-  );
-  const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
-};
-
 const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
   const { request } = event;
   const contentType = request.headers.get("content-type").split(";")[0];
   const contentLength = parseInt(request.headers.get("content-length"), 10);
+  const cfRay = request.headers.get("cf-ray");
 
   const { searchParams } = new URL(request.url);
-  const distance = searchParams.get("distance");
-  const speed = searchParams.get("speed");
   const wakeWord = searchParams.get("wake_word");
+  const userContent = searchParams.get("user_content");
+  const sanitizedUserContent = userContent
+    ? userContent.replace(/[^a-zA-Z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+    : "";
 
   if (request.method !== "PUT") {
     return createResponse({
@@ -73,10 +63,10 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
       status: 413,
     });
   }
-  if (!(distance && speed && wakeWord)) {
+  if (!(wakeWord && sanitizedUserContent)) {
     return createResponse({
       content: {
-        message: `Invalid parameters: missing distance, speed or wake_word`,
+        message: `Invalid parameters: missing user_content or wake_word`,
       },
     });
   }
@@ -87,11 +77,16 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
     });
   }
 
-  const date = new Date().toISOString().substring(0, 23).replace(/:/g, "-");
-  const userHash = await getUserHash(request);
+  if (sanitizedUserContent.length > USER_CONTENT_MAX_CONTENT_LENGTH) {
+    return createResponse({
+      content: {
+        message: `Invalid user content length, received: ${sanitizedUserContent.length}, allowed [<${USER_CONTENT_MAX_CONTENT_LENGTH}]`,
+      },
+    });
+  }
+  
   const keyExtension = contentType.replace("audio/", "");
-
-  const key = `${wakeWord}-${date}-${distance}-${speed}-${userHash}.${keyExtension}`;
+  const key = `${wakeWord}-${sanitizedUserContent}-${cfRay}.${keyExtension}`;
 
   await event.env.WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
