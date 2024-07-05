@@ -3,6 +3,9 @@ import { routeRequest } from "../src/router";
 import { webcrypto } from "crypto";
 import { WorkerEvent } from "../src/common";
 
+const USER_CONTENT_TO_MANY_CHARACTERS =
+  "rrdgY445SJ6TlXFDFUpWJFy29hudyZQsL8cYRYzlAutBJdoweJRPVphWMr6qprory8sYfe6WXSDn5hv293CAP8ybzBM22Ju3LIKKBwrWookqptAZmpydYokTovItHHIWHq7vnmzLYBB1jTDioFcFUeR"; // this is 151 character long
+
 describe("Assist handler", function () {
   let MockRequest: any;
   let MockEvent: WorkerEvent;
@@ -133,6 +136,31 @@ describe("Assist handler", function () {
     );
     expect(response.status).toBe(400);
   });
+
+  // This is redacted for now, as user_content is optional. It will be required shortly in the future
+  // *** please confirm error message when this is implemented ***
+
+  // it("rejects when missing user_content", async () => {
+  //   // @ts-expect-error overriding read-only property
+  //   MockEvent.request.url =
+  //     "https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu";
+  //   const response = await routeRequest(MockSentry, MockEvent);
+  //   const result = await response.json();
+  //   expect((result as any).message).toStrictEqual(
+  //     "Invalid parameters: missing user_content or wake_word"
+  //   );
+  //   expect(response.status).toBe(400);
+  // });
+
+  // This will be uncommented once we remove speed and distance in different PR
+  // it("rejects when user_content length is above maximum", async () => {
+  //   // @ts-expect-error overriding read-only property
+  //   MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_nabu&user_content=${USER_CONTENT_TO_MANY_CHARACTERS}`;
+  //   const response = await routeRequest(MockSentry, MockEvent);
+  //   const result = await response.json();
+  //   expect((result as any).message).toContain("Invalid user content length");
+  //   expect(response.status).toBe(400);
+  // });
 
   it("rejects when unkown wake_word", async () => {
     // @ts-expect-error overriding read-only property
