@@ -99,6 +99,22 @@ describe("Assist handler", function () {
     expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(1);
   });
 
+  it("succeed on valid audio/ogg;codec=opus content-type", async () => {
+    // @ts-expect-error overriding read-only property
+    MockEvent.request.headers = new Map(
+      Object.entries({
+        "CF-Connecting-IP": "1.2.3.4",
+        "content-type": "audio/ogg;codec=opus",
+      })
+    );
+    const response = await routeRequest(MockSentry, MockEvent);
+    const result: Record<string, string> = await response.json();
+    expect(response.status).toBe(201);
+    expect(result.message).toStrictEqual("success");
+    expect(result.key.endsWith(".ogg")).toBeTruthy();
+    expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(1);
+  });
+
   it("succeed on valid audio/mp4 content-type", async () => {
     // @ts-expect-error overriding read-only property
     MockEvent.request.headers = new Map(
