@@ -27,7 +27,7 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
   const { request } = event;
   const contentType = request.headers.get("content-type");
   const contentLength = parseInt(request.headers.get("content-length"), 10);
-  const cfRay = request.headers["CF-RAY"];
+  const cfRay = request.headers.get("cf-ray")
 
   const { searchParams } = new URL(request.url);
   const distance = searchParams.get("distance");
