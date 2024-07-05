@@ -95,7 +95,7 @@ describe("Assist handler", function () {
     const result: Record<string, string> = await response.json();
     expect(response.status).toBe(201);
     expect(result.message).toStrictEqual("success");
-    expect(result.key.endsWith(".webm")).toBeTruthy();
+    expect(result.key.endsWith(".ogg")).toBeTruthy();
     expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledTimes(1);
   });
 
