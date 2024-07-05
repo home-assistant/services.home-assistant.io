@@ -108,7 +108,7 @@ describe("Assist handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
     expect((result as any).message).toStrictEqual(
-      "Invalid parameters: missing wake_word"
+      "Invalid parameters: missing user_content or wake_word"
     );
     expect(response.status).toBe(400);
   });
@@ -120,7 +120,7 @@ describe("Assist handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
     expect((result as any).message).toStrictEqual(
-      "Invalid parameters: missing distance, speed, user_content or wake_word"
+      "Invalid parameters: missing user_content or wake_word"
     );
     expect(response.status).toBe(400);
   });
@@ -137,7 +137,7 @@ describe("Assist handler", function () {
   it("rejects when unkown wake_word", async () => {
     // @ts-expect-error overriding read-only property
     MockEvent.request.url =
-      "https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=unknown";
+      "https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=unknown&user_content=user-content";
     const response = await routeRequest(MockSentry, MockEvent);
     const result = await response.json();
     expect((result as any).message).toStrictEqual(
