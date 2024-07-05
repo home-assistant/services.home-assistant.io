@@ -4,7 +4,11 @@ import { WorkerEvent } from "../common";
 enum TRIGGER_PATH {
   WAKE_WORD_TRAINING_UPLOAD = "/assist/wake_word/training_data/upload",
 }
-const WAKE_WORD_ALLOWED_CONTENT_TYPES = ["audio/webm"];
+const WAKE_WORD_ALLOWED_CONTENT_TYPES = [
+  "audio/webm",
+  "audio/ogg",
+  "audio/mp4",
+];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
 
