@@ -320,10 +320,10 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workers-shared/-/workers-shared-0.2.0.tgz#0888a464b9e5b6b5a12bfeb0c1110d9fe04ce3c4"
   integrity sha512-tIWLooWkBMuoKRk72lr6YrEtVlVdUTtAGVmPOnUroMrnri/9YLx+mVawL0/egDgSGmPbmvkdBFsUGRuI+aZmxg==
 
-"@cloudflare/workers-types@^4.20240815.0":
-  version "4.20240815.0"
-  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20240815.0.tgz#d808f35c6d4ffc15d64e94aee370dd7549a7167d"
-  integrity sha512-H/IXCOahT1lr4RKzsiCkyjM7+LCPLtl2wjxyLG8xMTNERR0XuD1Vcfns6TraE0cd5+IcKe7j3rpzBlSCjZ+61A==
+"@cloudflare/workers-types@^4.20240821.1":
+  version "4.20240821.1"
+  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20240821.1.tgz#d60219e1054f0f73e325dd11c1081df1c0d851c4"
+  integrity sha512-icAkbnAqgVl6ef9lgLTom8na+kj2RBw2ViPAQ586hbdj0xZcnrjK7P46Eu08OU9D/lNDgN2sKU/sxhe2iK/gIg==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
