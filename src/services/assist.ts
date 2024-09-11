@@ -10,6 +10,7 @@ const WAKE_WORD_ALLOWED_CONTENT_TYPES = [
   "audio/mp4",
 ];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
+const NEGATIVE_WAKE_WORD_ALLOWED_NAMES = ["ok_now"];
 const WAKE_WORD_MAX_CONTENT_LENGTH = 250 * 1024;
 const USER_CONTENT_MAX_CONTENT_LENGTH = 150;
 
@@ -71,7 +72,11 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
     });
   }
 
-  if (!WAKE_WORD_ALLOWED_NAMES.includes(wakeWord)) {
+  if (
+    ![...WAKE_WORD_ALLOWED_NAMES, ...NEGATIVE_WAKE_WORD_ALLOWED_NAMES].includes(
+      wakeWord
+    )
+  ) {
     return createResponse({
       content: { message: `Invalid wake word, received: ${wakeWord}` },
     });
@@ -84,9 +89,12 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
       },
     });
   }
-  
+
+  const isNegative = NEGATIVE_WAKE_WORD_ALLOWED_NAMES.includes(wakeWord);
   const keyExtension = contentType.replace("audio/", "");
-  const key = `${wakeWord}-${sanitizedUserContent}-${cfRay}.${keyExtension}`;
+  const key = `${
+    isNegative ? "negative-" : ""
+  }${wakeWord}-${sanitizedUserContent}-${cfRay}.${keyExtension}`;
 
   await event.env.WAKEWORD_TRAINING_BUCKET.put(key, request.body);
 
