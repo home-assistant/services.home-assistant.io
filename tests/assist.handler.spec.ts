@@ -10,7 +10,7 @@ const FILES_VALID = [
   { contentType: "audio/webm", fileExtension: ".webm" },
   { contentType: "audio/ogg", fileExtension: ".ogg" },
   { contentType: "audio/mp4", fileExtension: ".mp4" },
-  { contentType: "audio/ogg;codec=opus", fileExtension: ".ogg" }
+  { contentType: "audio/ogg;codec=opus", fileExtension: ".ogg" },
 ];
 
 describe("Assist handler", function () {
@@ -87,6 +87,17 @@ describe("Assist handler", function () {
           result.key,
           expect.anything()
         );
+      });
+    });
+
+    ["casita", "ok_nabu", "ok_now"].forEach(async (wakeWord) => {
+      it(`accepts "${wakeWord}" as wake word`, async () => {
+        // @ts-expect-error overriding read-only property
+        MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=${wakeWord}&user_content=${USER_CONTENT_VALID}`;
+        const response = await routeRequest(MockSentry, MockEvent);
+        const result = await response.json();
+        expect((result as any).message).toStrictEqual("success");
+        expect(response.status).toBe(201);
       });
     });
   });
@@ -184,6 +195,19 @@ describe("Assist handler", function () {
         "Invalid wake word, received: unknown"
       );
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe("negative wake_word", () => {
+    it(`generates filename starting with "negative-" if the wake word is negative`, async () => {
+      // @ts-expect-error overriding read-only property
+      MockEvent.request.url = `https://services.home-assistant.io/assist/wake_word/training_data/upload?wake_word=ok_now&user_content=${USER_CONTENT_VALID}`;
+      const response = await routeRequest(MockSentry, MockEvent);
+      const result: Record<string, string> = await response.json();
+
+      expect(response.status).toBe(201);
+      expect(result.message).toStrictEqual("success");
+      expect(result.key.startsWith("negative-")).toBeTruthy();
     });
   });
 });
