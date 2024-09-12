@@ -11,6 +11,7 @@ const FILES_VALID = [
   { contentType: "audio/ogg", fileExtension: ".ogg" },
   { contentType: "audio/mp4", fileExtension: ".mp4" },
   { contentType: "audio/ogg;codec=opus", fileExtension: ".ogg" },
+  { contentType: "audio/wav", fileExtension: ".wav" },
 ];
 
 describe("Assist handler", function () {

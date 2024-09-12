@@ -8,6 +8,7 @@ const WAKE_WORD_ALLOWED_CONTENT_TYPES = [
   "audio/webm",
   "audio/ogg",
   "audio/mp4",
+  "audio/wav",
 ];
 const WAKE_WORD_ALLOWED_NAMES = ["casita", "ok_nabu"];
 const NEGATIVE_WAKE_WORD_ALLOWED_NAMES = ["ok_now"];
