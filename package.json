@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20240909.0",
+    "@cloudflare/workers-types": "^4.20240919.0",
     "@types/jest": "^27.5.0",
     "@types/node": "^22.5.5",
     "jest": "^26.6.3",
