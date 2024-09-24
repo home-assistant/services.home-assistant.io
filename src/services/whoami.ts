@@ -43,7 +43,7 @@ export async function whoamiHandler(
         request.cf.timezone ||
         (request.cf.country &&
           countryTimeZoneFallback.get(request.cf.country)) ||
-        null,
+        undefined,
       iso_time: date.toISOString(),
       timestamp: Math.round(date.getTime() / 1000),
     })

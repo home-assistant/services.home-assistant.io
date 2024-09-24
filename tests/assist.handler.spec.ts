@@ -72,6 +72,7 @@ describe("Assist handler", function () {
           Object.entries({
             "CF-Connecting-IP": "1.2.3.4",
             "content-type": contentType,
+            "content-length": 150 * 1024,
           })
         );
 
