@@ -40,7 +40,10 @@ export async function whoamiHandler(
   const httpResponse: Map<string, any> = new Map(
     Object.entries({
       timezone:
-        request.cf.timezone || countryTimeZoneFallback.get(request.cf.country),
+        request.cf.timezone ||
+        (request.cf.country &&
+          countryTimeZoneFallback.get(request.cf.country)) ||
+        undefined,
       iso_time: date.toISOString(),
       timestamp: Math.round(date.getTime() / 1000),
     })
@@ -52,7 +55,8 @@ export async function whoamiHandler(
       city: request.cf.city,
       continent: request.cf.continent,
       country: request.cf.country,
-      currency: countryCurrency[request.cf.country] || null,
+      currency:
+        (request.cf.country && countryCurrency[request.cf.country]) || null,
       latitude: request.cf.latitude,
       longitude: request.cf.longitude,
       postal_code: request.cf.postalCode,

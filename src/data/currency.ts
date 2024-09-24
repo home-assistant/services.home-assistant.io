@@ -1,6 +1,6 @@
 // From http://country.io/currency.json
 
-export const countryCurrency = {
+export const countryCurrency: Record<Iso3166Alpha2Code | "T1", string> = {
   BD: "BDT",
   BE: "EUR",
   BF: "XOF",
@@ -146,7 +146,6 @@ export const countryCurrency = {
   NR: "AUD",
   NU: "NZD",
   CK: "NZD",
-  XK: "EUR",
   CI: "XOF",
   CH: "CHF",
   CO: "COP",
@@ -251,4 +250,5 @@ export const countryCurrency = {
   UA: "UAH",
   QA: "QAR",
   MZ: "MZN",
+  T1: "", // T1 is a special case for Tor requests that Cloudflare cannot determine a country code for
 };

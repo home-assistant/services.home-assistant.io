@@ -31,8 +31,10 @@ const createResponse = (options: {
 
 const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
   const { request } = event;
-  const contentType = request.headers.get("content-type").split(";")[0];
-  const contentLength = parseInt(request.headers.get("content-length"), 10);
+  const contentType = request.headers.get("content-type")?.split(";")[0];
+  const contentLengthHeaderValue = request.headers.get("content-length");
+  const contentLength =
+    contentLengthHeaderValue && parseInt(contentLengthHeaderValue, 10);
   const cfRay = request.headers.get("cf-ray");
 
   const { searchParams } = new URL(request.url);
@@ -49,7 +51,7 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
     });
   }
 
-  if (!WAKE_WORD_ALLOWED_CONTENT_TYPES.includes(contentType)) {
+  if (!contentType || !WAKE_WORD_ALLOWED_CONTENT_TYPES.includes(contentType)) {
     return createResponse({
       content: {
         message: `Invalid content-type, received: ${contentType}, allowed: ${WAKE_WORD_ALLOWED_CONTENT_TYPES}`,
@@ -57,7 +59,7 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
       status: 415,
     });
   }
-  if (contentLength > WAKE_WORD_MAX_CONTENT_LENGTH) {
+  if (!contentLength || contentLength > WAKE_WORD_MAX_CONTENT_LENGTH) {
     return createResponse({
       content: {
         message: `Invalid content-length, received: ${contentLength}, allowed [<${WAKE_WORD_MAX_CONTENT_LENGTH}]`,
@@ -105,7 +107,7 @@ const handleUploadAudioFile = async (event: WorkerEvent): Promise<Response> => {
 export async function assistHandler(
   requestUrl: URL,
   event: WorkerEvent,
-  sentry: Toucan
+  _sentry: Toucan
 ): Promise<Response> {
   if (event.request.method === "OPTIONS") {
     // CORS preflight request
