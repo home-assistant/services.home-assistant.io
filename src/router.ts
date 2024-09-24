@@ -45,7 +45,7 @@ export async function handleRequestWrapper(
 ): Promise<Response> {
   try {
     return await serviceHandler(requestUrl, event, sentry);
-  } catch (err) {
+  } catch (err: any) {
     if (!(err instanceof ServiceError)) {
       err = new ServiceError(err.message);
     }
@@ -53,7 +53,9 @@ export async function handleRequestWrapper(
     const captureId = sentry.captureException(err);
 
     let returnBody: string;
-    const headers = { "Access-Control-Allow-Origin": "*" };
+    const headers: Record<string, string> = {
+      "Access-Control-Allow-Origin": "*",
+    };
 
     if ((event.request.headers.get("accept") || "").includes("json")) {
       returnBody = JSON.stringify({ error: err.errorType });
