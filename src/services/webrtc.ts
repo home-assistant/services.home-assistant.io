@@ -8,9 +8,9 @@ interface StunDomainRoutingConfig {
 }
 
 const STUN_DOMAINS = {
-  "us-east-1": "stun:stun-us.home-assistant.io:3478",
-  "eu-central-1": "stun:stun-eu.home-assistant.io:3478",
-  "ap-southeast-1": "stun:stun-ap.home-assistant.io:3478",
+  "us-east-1": "stun:44.197.212.58:3478",
+  "eu-central-1": "stun:44.197.212.58:3478",
+  "ap-southeast-1": "stun:44.197.212.58:3478",
 };
 
 const STUN_DOMAIN_ROUTING_CONFIG: StunDomainRoutingConfig = {
