@@ -1,7 +1,8 @@
 import { Toucan } from "toucan-js";
 import { ServiceError, WorkerEvent } from "./common";
-import { whoamiHandler } from "./services/whoami";
 import { assistHandler } from "./services/assist";
+import { whoamiHandler } from "./services/whoami";
+import { webrtcHandler } from "./services/webrtc";
 
 export async function routeRequest(sentry: Toucan, event: WorkerEvent) {
   let requestUrl = new URL(event.request.url);
@@ -27,6 +28,9 @@ export async function routeRequest(sentry: Toucan, event: WorkerEvent) {
 
     case "assist":
       return handleRequestWrapper(requestUrl, event, sentry, assistHandler);
+
+    case "webrtc":
+      return handleRequestWrapper(requestUrl, event, sentry, webrtcHandler);
 
     default:
       return new Response(null, { status: 404 });
