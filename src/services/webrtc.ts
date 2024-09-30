@@ -32,13 +32,17 @@ const getStunDomain = (country?: string, continent?: string): string =>
   STUN_DOMAIN_ROUTING_CONFIG.default;
 
 export const webrtcHandler = async (
-  _requestUrl: URL,
+  requestUrl: URL,
   event: WorkerEvent,
   _sentry: Toucan
 ): Promise<Response> => {
   const { request } = event;
   if (request.method !== "GET") {
     return new Response(null, { status: 405 });
+  }
+
+  if (requestUrl.pathname !== "/webrtc/ice_servers") {
+    return new Response(null, { status: 404 });
   }
 
   if (!request.cf) {
