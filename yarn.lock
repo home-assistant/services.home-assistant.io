@@ -323,10 +323,10 @@
     mime "^3.0.0"
     zod "^3.22.3"
 
-"@cloudflare/workers-types@^4.20240919.0":
-  version "4.20240919.0"
-  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20240919.0.tgz#3da4d581d8b06f23e6302311b97975eaf8b39e4b"
-  integrity sha512-DZwTpZVAV+fKTLxo6ntC2zMNRL/UJwvtMKUt/U7ZyJdR+t0qcBUZGx8jLi9gOFWYxkzO3s7slajwkR2hQRPXYQ==
+"@cloudflare/workers-types@^4.20240925.0":
+  version "4.20240925.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20240925.0.tgz#6324d6c6abefe578665e3eb4340953afa6453ae7"
+  integrity sha512-KpqyRWvanEuXgBTKYFzRp4NsWOEcswxjsPRSre1zYQcODmc8PUrraVHQUmgvkJgv3FzB+vI9xm7J6oE4MmZHCA==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
