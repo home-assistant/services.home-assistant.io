@@ -51,7 +51,7 @@ describe("WebRTC Handler", () => {
       MockEvent.request.cf.continent = continent;
       const response = await routeRequest(MockSentry, MockEvent);
       const result = await response.json<Record<string, any>>();
-      expect(result).toEqual([{ urls: [expected] }]);
+      expect(result).toEqual([{ urls: expected }]);
     });
   }
 });

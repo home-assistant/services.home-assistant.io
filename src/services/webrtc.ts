@@ -51,7 +51,7 @@ export const webrtcHandler = async (
 
   const stunDomain = getStunDomain(request.cf.country, request.cf.continent);
 
-  return new Response(JSON.stringify([{ urls: [stunDomain] }]), {
+  return new Response(JSON.stringify([{ urls: stunDomain }]), {
     headers: {
       "content-type": "application/json;charset=UTF-8",
       "Access-Control-Allow-Origin": "*",
