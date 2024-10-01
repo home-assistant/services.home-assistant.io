@@ -27,12 +27,24 @@ describe("WebRTC Handler", () => {
   });
 
   for (const [country, continent, expected] of [
-    ["NO_CUSTOM_CONFIG", "NO_CUSTOM_CONFIG", "stun:44.197.212.58:3478"],
-    ["IL", "NOT_USED", "stun:44.197.212.58:3478"],
-    ["LB", "NOT_USED", "stun:44.197.212.58:3478"],
-    ["NO_CUSTOM_CONFIG", "EU", "stun:44.197.212.58:3478"],
-    ["NO_CUSTOM_CONFIG", "AS", "stun:44.197.212.58:3478"],
-    ["NO_CUSTOM_CONFIG", "OC", "stun:44.197.212.58:3478"],
+    [
+      "NO_CUSTOM_CONFIG",
+      "NO_CUSTOM_CONFIG",
+      "stun:stun-us-east-1.home-assistant.io:3478",
+    ],
+    ["IL", "NOT_USED", "stun:stun-eu-central-1.home-assistant.io:3478"],
+    ["LB", "NOT_USED", "stun:stun-eu-central-1.home-assistant.io:3478"],
+    ["NO_CUSTOM_CONFIG", "EU", "stun:stun-eu-central-1.home-assistant.io:3478"],
+    [
+      "NO_CUSTOM_CONFIG",
+      "AS",
+      "stun:stun-ap-southeast-1.home-assistant.io:3478",
+    ],
+    [
+      "NO_CUSTOM_CONFIG",
+      "OC",
+      "stun:stun-ap-southeast-1.home-assistant.io:3478",
+    ],
   ]) {
     it(`returns correct domains for country ${country} and continent ${continent}`, async () => {
       MockEvent.request.cf.country = country;
