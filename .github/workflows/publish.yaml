@@ -36,7 +36,7 @@ jobs:
           echo "environment=${environment}" >> "$GITHUB_OUTPUT"
 
       - name: Publish ${{ steps.environment.outputs.environment }} worker
-        uses: cloudflare/wrangler-action@v3.11.0
+        uses: cloudflare/wrangler-action@v3.12.1
         with:
           apiToken: ${{ secrets.CF_WORKER_API_TOKEN }}
           wranglerVersion: ${{ steps.wrangler.outputs.version }}
