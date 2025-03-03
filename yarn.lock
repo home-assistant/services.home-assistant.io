@@ -4239,10 +4239,10 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
-toucan-js@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/toucan-js/-/toucan-js-4.1.0.tgz#10785c7974f32df10d98995b349466ac3be97ed9"
-  integrity sha512-KaD6yfjFuOiFfKccvJ95EICwxus+g2mfPUHyxfPCq7yzsEg5Qi2wpym0cxsZI7oS4t3S7/HwL1v+2TW5/pGAUA==
+toucan-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/toucan-js/-/toucan-js-4.1.1.tgz#7fe3c7b7b033f2e9db2a15ba7f083d5efc3df38d"
+  integrity sha512-GTPwEaCRN8IbYe5/VeGiwxYvMO0dKaC16fTeLbF+QGswjkLZ9JUqAfDhLMyH2SWukYhmetH+uxWa1Bhluv/evQ==
   dependencies:
     "@sentry/core" "8.9.2"
     "@sentry/types" "8.9.2"
