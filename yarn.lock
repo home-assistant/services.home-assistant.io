@@ -290,10 +290,10 @@
   dependencies:
     mime "^3.0.0"
 
-"@cloudflare/unenv-preset@2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@cloudflare/unenv-preset/-/unenv-preset-2.3.1.tgz#63c6af2b92adf904f25a10e3957df0db7f161622"
-  integrity sha512-Xq57Qd+ADpt6hibcVBO0uLG9zzRgyRhfCUgBT9s+g3+3Ivg5zDyVgLFy40ES1VdNcu8rPNSivm9A+kGP5IVaPg==
+"@cloudflare/unenv-preset@2.3.2":
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/@cloudflare/unenv-preset/-/unenv-preset-2.3.2.tgz#356a449ac8f45989486e4d121ca35e597d70fbb0"
+  integrity sha512-MtUgNl+QkQyhQvv5bbWP+BpBC1N0me4CHHuP2H4ktmOMKdB/6kkz/lo+zqiA4mEazb4y+1cwyNjVrQ2DWeE4mg==
 
 "@cloudflare/workerd-darwin-64@1.20250508.0":
   version "1.20250508.0"
@@ -3213,16 +3213,17 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-miniflare@4.20250508.2:
-  version "4.20250508.2"
-  resolved "https://registry.yarnpkg.com/miniflare/-/miniflare-4.20250508.2.tgz#73639519ab2b129a75fdb93118d13a3c4d0e9286"
-  integrity sha512-+2XoHLSbY49LNQgZoAJRX+SyUwC767Cz46pgx4T/j1YGKSrMzAxCOk59b12QoFNnN50Gtd9HkT3ukZn2nzrIVw==
+miniflare@4.20250508.3:
+  version "4.20250508.3"
+  resolved "https://registry.yarnpkg.com/miniflare/-/miniflare-4.20250508.3.tgz#26ac2e636dd9fd6cf9ed71cbf8c40f80a84a4547"
+  integrity sha512-43oTmZ0CCmUcieetI5YDDyX0IiwhOcVIWzdBBCqWXK3F1XgQwg4d3fTqRyJnCmHIoaYx9CE1kTEKZC1UahPQhA==
   dependencies:
     "@cspotcode/source-map-support" "0.8.1"
     acorn "8.14.0"
     acorn-walk "8.3.2"
     exit-hook "2.2.1"
     glob-to-regexp "0.4.1"
+    sharp "^0.33.5"
     stoppable "1.1.0"
     undici "^5.28.5"
     workerd "1.20250508.0"
@@ -4270,10 +4271,10 @@ typescript@^4.9.5:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
-ufo@^1.5.4:
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.5.4.tgz#16d6949674ca0c9e0fbbae1fa20a71d7b1ded754"
-  integrity sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==
+ufo@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.6.1.tgz#ac2db1d54614d1b22c1d603e3aef44a85d8f146b"
+  integrity sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==
 
 undici-types@~6.21.0:
   version "6.21.0"
@@ -4287,16 +4288,16 @@ undici@^5.28.5:
   dependencies:
     "@fastify/busboy" "^2.0.0"
 
-unenv@2.0.0-rc.15:
-  version "2.0.0-rc.15"
-  resolved "https://registry.yarnpkg.com/unenv/-/unenv-2.0.0-rc.15.tgz#7fe427b6634f00bda1ade4fecdbc6b2dd7af63be"
-  integrity sha512-J/rEIZU8w6FOfLNz/hNKsnY+fFHWnu9MH4yRbSZF3xbbGHovcetXPs7sD+9p8L6CeNC//I9bhRYAOsBt2u7/OA==
+unenv@2.0.0-rc.17:
+  version "2.0.0-rc.17"
+  resolved "https://registry.yarnpkg.com/unenv/-/unenv-2.0.0-rc.17.tgz#fa9b80d30e16f73e2d4a0be568ca97c0fb76bdac"
+  integrity sha512-B06u0wXkEd+o5gOCMl/ZHl5cfpYbDZKAT+HWTL+Hws6jWu7dCiqBBXXXzMFcFVJb8D4ytAnYmxJA83uwOQRSsg==
   dependencies:
     defu "^6.1.4"
     exsolve "^1.0.4"
     ohash "^2.0.11"
     pathe "^2.0.3"
-    ufo "^1.5.4"
+    ufo "^1.6.1"
 
 union-value@^1.0.0:
   version "1.0.1"
@@ -4527,18 +4528,18 @@ workerd@1.20250508.0:
     "@cloudflare/workerd-linux-arm64" "1.20250508.0"
     "@cloudflare/workerd-windows-64" "1.20250508.0"
 
-wrangler@^4.15.2:
-  version "4.15.2"
-  resolved "https://registry.yarnpkg.com/wrangler/-/wrangler-4.15.2.tgz#e3cc5f9c7f50aa07733abf4ac28cac126a286ad0"
-  integrity sha512-Rv7zP61DOVzIS3af+/1UzJkRVpqu6VDRi6uIVMiwD1LkXG5Ov08tv94jgnE9bSjVf0paQg3dl0E89h+wQ0x/Bw==
+wrangler@^4.16.1:
+  version "4.16.1"
+  resolved "https://registry.yarnpkg.com/wrangler/-/wrangler-4.16.1.tgz#3d3bcd0a78c84fb2e27068afeceb7d6524470d2a"
+  integrity sha512-YiLdWXcaQva2K/bqokpsZbySPmoT8TJFyJPsQPZumnkgimM9+/g/yoXArByA+pf+xU8jhw7ybQ8X1yBGXv731g==
   dependencies:
     "@cloudflare/kv-asset-handler" "0.4.0"
-    "@cloudflare/unenv-preset" "2.3.1"
+    "@cloudflare/unenv-preset" "2.3.2"
     blake3-wasm "2.1.5"
     esbuild "0.25.4"
-    miniflare "4.20250508.2"
+    miniflare "4.20250508.3"
     path-to-regexp "6.3.0"
-    unenv "2.0.0-rc.15"
+    unenv "2.0.0-rc.17"
     workerd "1.20250508.0"
   optionalDependencies:
     fsevents "~2.3.2"
