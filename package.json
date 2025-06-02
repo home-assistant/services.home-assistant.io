@@ -5,7 +5,7 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250525.0",
     "@types/jest": "^27.5.0",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.29",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
     "ts-loader": "^9.5.2",
