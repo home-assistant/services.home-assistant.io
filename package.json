@@ -5,14 +5,14 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20251014.0",
     "@types/jest": "^27.5.0",
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.9.1",
     "jest": "^26.6.3",
     "ts-jest": "^26.5.6",
     "ts-loader": "^9.5.4",
     "typescript": "^4.9.5",
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1",
-    "wrangler": "^4.43.0"
+    "wrangler": "^4.45.0"
   },
   "jest": {
     "transform": {
