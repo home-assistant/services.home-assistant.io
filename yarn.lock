@@ -318,10 +318,10 @@
   resolved "https://registry.yarnpkg.com/@cloudflare/workerd-windows-64/-/workerd-windows-64-1.20260205.0.tgz#d3845e54e205867fba540518bf1936b6eb4271ad"
   integrity sha512-SMPW5jCZYOG7XFIglSlsgN8ivcl0pCrSAYxCwxtWvZ88whhcDB/aISNtiQiDZujPH8tIo2hE5dEkxW7tGEwc3A==
 
-"@cloudflare/workers-types@^4.20260207.0":
-  version "4.20260207.0"
-  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20260207.0.tgz#4beba276a76c24a9e7c96eab6c8cf076a47bbae1"
-  integrity sha512-PSxgnAOK0EtTytlY7/+gJcsQJYg0Qo7KlOMSC/wiBE+pBqKjuKdd1ZgM+NvpPNqZAjWV5jqAMTTNYEmgk27gYw==
+"@cloudflare/workers-types@^4.20260214.0":
+  version "4.20260214.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/workers-types/-/workers-types-4.20260214.0.tgz#2768cfd15df7ada45aa58532bb802d63b8350f03"
+  integrity sha512-qb8rgbAdJR4BAPXolXhFL/wuGtecHLh1veOyZ1mK6QqWuCdI3vK1biKC0i3lzmzdLR/DZvsN3mNtpUE8zpWGEg==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
