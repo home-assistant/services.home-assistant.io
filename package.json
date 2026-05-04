@@ -3,7 +3,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260426.1",
+    "@cloudflare/workers-types": "^4.20260504.1",
     "@types/jest": "^27.5.0",
     "@types/node": "^25.6.0",
     "jest": "^26.6.3",
