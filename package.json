@@ -11,7 +11,7 @@
     "ts-loader": "^9.5.7",
     "typescript": "^4.9.5",
     "webpack": "^5.105.3",
-    "webpack-cli": "^7.0.2",
+    "webpack-cli": "^7.0.3",
     "wrangler": "^4.85.0"
   },
   "jest": {
