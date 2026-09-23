@@ -71,7 +71,7 @@ describe("Handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
 
     expect(response.status).toBe(405);
-    expect(MockSentry.captureException).toBeCalledWith(
+    expect(MockSentry.captureException).toHaveBeenCalledWith(
       Error('The requested key "invalid" is not valid')
     );
   });
@@ -98,7 +98,7 @@ describe("Handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
 
     expect(response.status).toBe(500);
-    expect(MockSentry.captureException).toBeCalledWith(
+    expect(MockSentry.captureException).toHaveBeenCalledWith(
       new ServiceError(
         'Value for required key "timezone" is undefined',
         WhoamiErrorType.MISSING_KEY_VALUE
@@ -111,7 +111,7 @@ describe("Handler", function () {
     const response = await routeRequest(MockSentry, MockEvent);
 
     expect(response.status).toBe(405);
-    expect(MockSentry.captureException).toBeCalledWith(
+    expect(MockSentry.captureException).toHaveBeenCalledWith(
       new ServiceError(
         "Requested key not allowed for http",
         WhoamiErrorType.NOT_ALLOWED,
