@@ -1,21 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
-
   "enabledManagers": ["github-actions", "npm", "nvm"],
-
   "minimumReleaseAge": "3 days",
   "schedule": ["before 8am on monday"],
-
   "semanticCommits": "disabled",
   "labels": ["dependencies"],
-
   "lockFileMaintenance": {
     "description": "Refresh yarn.lock weekly, so indirect dependencies come in one PR instead of one PR each",
     "enabled": true,
     "schedule": ["before 8am on monday"]
   },
-
   "packageRules": [
     {
       "description": "Label npm updates like Dependabot did",
