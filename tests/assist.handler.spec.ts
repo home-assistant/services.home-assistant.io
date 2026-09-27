@@ -85,7 +85,7 @@ describe("Assist handler", function () {
         expect(
           MockEvent.env.WAKEWORD_TRAINING_BUCKET.put
         ).toHaveBeenCalledTimes(1);
-        expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toBeCalledWith(
+        expect(MockEvent.env.WAKEWORD_TRAINING_BUCKET.put).toHaveBeenCalledWith(
           result.key,
           expect.anything()
         );
